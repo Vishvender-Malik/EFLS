@@ -1,0 +1,32 @@
+syntax = "proto2";
+
+package mav;
+
+message Aircraft {
+	required double lat = 1;
+	required double lon = 2;
+	required double bearing = 3;
+	required double speed = 4;
+	required double altitude = 5;
+	required double wind_speed = 6;
+	required double wind_direction = 7;
+	required double motor_current = 8;
+	required double motor_throttle = 9;
+}
+
+message Waypoints {
+	repeated Waypoint waypoint = 1;
+}
+
+message Waypoint {
+	required double lat = 1;
+	required double lon = 2;
+	required double altitude = 3;
+	required double speed = 4;
+}
+
+message AircraftLink {
+	repeated Aircraft aircrafts = 1;
+	repeated Waypoints waypoints = 2;
+}
+
