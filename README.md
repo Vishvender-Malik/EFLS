@@ -42,7 +42,6 @@ The following are the required steps to compile EFLS:
 3. Install libosmium
 4. Install curl
 5. Install proto3 - only required if changing the protocol buffer
-6. Compile using C++ compiler (minimum C++11 is required) - G++ has worked well for me
-
+6. Compile using C++ compiler (minimum C++11 is required) - CMake file must be used
 
 
