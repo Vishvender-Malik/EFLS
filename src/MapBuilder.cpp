@@ -101,3 +101,7 @@ void MapBuilder::process() {
     scan.processed = true;
 }
 
+Location MapBuilder::getOrigin() {
+    return scan.origin;
+}
+

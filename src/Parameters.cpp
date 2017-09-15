@@ -8,6 +8,41 @@
 #include <Parameters.h>
 
 Parameters::Parameters() {
+    //Scan parameters
+        chunk_size = 1000;  //Number of pixels in a chunk
+        chunk_meters = 1;    //Size of each pixel in meters for a chunk
+
+        //Satellite scan parameters
+        satellite_sensitivity_init = 10;   //Sensitivity of scan, initial value
+        satellite_sensitivity;  //Sensitivity of scan
+
+        //Map scan parameters
+        map_sensitivity_init = 10;   //Sensitivity of scan, initial value
+        map_sensitivity;  //Sensitivity of scan
+
+        //Generic scan parameters
+        resolution.x = 3000;
+        resolution.y = 3000;
+
+
+        //Land site parameters
+        runway_length_init = 300;  //Length of runway in meters, initial value
+        runway_width_init = 100;     //Width of runway in meters, initial value
+        runway_length;   //Length of runway in meters
+        runway_width;    //Length of runway in meters
+
+        //Aircraft parameters
+        glide_slope = 10;  //Meters forward for every meter of altitude lost
+
+        //Aircraft landing approach parameters
+
+        //EFLcheck parameters
+        throttle_threshold = 30;
+        current_min = 3.0;
+
+        //Priority parameters
+        priority_range = 0.0001;   //Converts meters of range into a priority level
+
     refresh();
 }
 
@@ -51,6 +86,10 @@ double Parameters::getCurrent_min() {
 
 double Parameters::getPriority_range() {
     return priority_range;
+}
+
+Matrix Parameters::getResolution() {
+    return resolution;
 }
 
 //Setters

@@ -31,6 +31,7 @@ public:
     void clear();
     void process();
     Scan getScan();
+    Location getOrigin();
 };
 
 

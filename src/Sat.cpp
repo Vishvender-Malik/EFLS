@@ -147,6 +147,7 @@ cv::Mat Sat::getImage() {
             cv::vconcat(images, imagesHoz, images);
         }
     }
+    cv::imwrite(fileName, images);
     return images;
 }
 
@@ -154,6 +155,7 @@ void Sat::process() {
     cv::Mat src, dst;
     src = getImage();
     rawImage = src;
+    cv::imwrite("satPic.bmp", src);
     dst.create( src.size(), src.type() );
     cv::Mat detected_edges;
     detected_edges = cannyDetection(src);

@@ -14,8 +14,8 @@
 
 Aircraft::Aircraft() {
     // ToDo Remove defined data, used only for testing purposes
-    location.lat = -37;
-    location.lon = 147;
+    location.lat = -35.279;
+    location.lon = 149.15;
     bearing = 0.0;
     speed = 0.0;
     altitude = 0.0;

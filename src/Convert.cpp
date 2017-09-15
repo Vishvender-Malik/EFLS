@@ -116,3 +116,39 @@ Location Convert::matrix2Coordinate(Location origin, Matrix location, double pix
     //Calculate the required location
     return coordinateProjection(origin, distance, bearing);
 }
+
+Matrix Convert::coordinate2Matrix(Location origin, Location location, Matrix dimension, double pixelPerMeter) {
+    Matrix output;
+    Location difference;     // Lat/Lon difference from origin to the boarder
+    difference.lat = (origin.lat - (coordinateProjection(origin, dimension.y/pixelPerMeter/2, 180)).lat);
+    difference.lon = (origin.lon - (coordinateProjection(origin, dimension.x/pixelPerMeter/2, 90)).lon);
+    //std::cout << location.lat << " " << location.lon << " " << difference.lat << " " <<difference.lon << " " << origin.lat << " " << origin.lon << std::endl;
+    if (fabs(origin.lat-location.lat) > fabs(difference.lat) || fabs(origin.lon-location.lon) > fabs(difference.lon)) {
+        output.x = -1;
+        return output;
+    }
+
+    output.y = -(origin.lat-location.lat)/(difference.lat*2) * dimension.y + dimension.y/2;
+    output.x = -(origin.lon-location.lon)/(difference.lon*2) * dimension.x + dimension.x/2;
+    return output;
+}
+
+cv::Mat Convert::lineExpansion(cv::Mat input) {
+    cv::Mat edges;
+    cv::Size sz = input.size();
+    edges.create(input.size(), input.type());
+    edges = cv::Scalar::all(255);
+    int boundary = 3;   //ToDo make parameter
+    for (int i = boundary; i < sz.height - boundary; i++) {
+        for (int j = boundary; j < sz.width - boundary; j++) {
+            if (input.at<uchar>(i,j) == 0) {
+                for (int k = 0; k < 5; k++) {
+                    for (int l = 0; l < 5; l++) {
+                        edges.at<uchar>(i+k-boundary, j+l-boundary) = 0;
+                    }
+                }
+            }
+        }
+    }
+    return edges;
+}

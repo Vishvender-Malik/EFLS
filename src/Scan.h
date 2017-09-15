@@ -24,7 +24,7 @@ struct Scan {
     Aircraft aircraft;
     Parameters param;
 
-    Location origin;        //Top left corner
+    Location origin;        //Center point
     int zoom;
     double pixelPerMeter;
 

@@ -34,6 +34,17 @@ void DecisionEngine::run() {
             scan.origin = satData.origin; //Not great, but will work. Should create new method of managing cache.
             //sat.runBuddy();
 
+            scan.data = satData.data;
+            map.update(scan);
+            Scan mapData = map.getScan();
+            cv::imwrite("test10.bmp",mapData.data);
+
+            cv::Mat rawCalFaded, rawCalImage;
+            rawCalImage = cv::imread("satPic.bmp");
+            cv::multiply(rawCalImage, cv::Scalar::all(1), rawCalFaded, 0.5);
+            rawCalImage.copyTo(rawCalFaded, map.getScan().data);
+            cv::imwrite("test13.bmp",rawCalFaded);
+
             Selection selection;
             selection.update(satData, satData, satData, scan);
 
@@ -54,6 +65,8 @@ void DecisionEngine::run() {
                 printf("%d, %4.6f, %4.6f \n", i, waypoint.at(i).location.lat, waypoint.at(i).location.lon);
             }
             printf("plane, %4.6f, %4.6f \n", scan.aircraft.getLocation().lat, scan.aircraft.getLocation().lon);
+
+
             /*
             map.update(scan);
             Scan mapData = map.getScan();
