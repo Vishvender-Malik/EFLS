@@ -1,1 +1,2 @@
-res/data/** filter=lfs diff=lfs merge=lfs -text
+res/data/map/australia.pbf filter=lfs diff=lfs merge=lfs -text
+res/data/satellite/SatImageLat-35.363Lon149.16.bmp filter=lfs diff=lfs merge=lfs -text
