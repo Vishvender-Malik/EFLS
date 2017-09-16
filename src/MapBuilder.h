@@ -34,6 +34,4 @@ public:
     Location getOrigin();
 };
 
-
-
 #endif /* MAPBUILDER_H_ */

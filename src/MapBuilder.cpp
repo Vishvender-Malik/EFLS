@@ -25,9 +25,7 @@ void MapBuilder::addWay(std::vector <Location> location) {
 
 void MapBuilder::clear() {
     MapBuilder::scan.processed = false;
-    cv::imwrite("test11.bmp", scan.data);
     scan.data = cv::Scalar::all(255);
-    cv::imwrite("test12.bmp", scan.data);
     mapLocation = std::vector<WayLocation>();
 }
 
@@ -37,7 +35,6 @@ Scan MapBuilder::getScan() {
 
 // Bresenham's line algorithm
 void MapBuilder::drawLine(float x1, float y1, float x2, float y2){
-    std::cout << x1 << " " << y1 << " " << x2 << " " << y2 << " ";
     bool steep = (fabs(y2 - y1) > fabs(x2 - x1));
     if(steep){
         std::swap(x1, y1);

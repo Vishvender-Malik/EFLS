@@ -66,23 +66,6 @@ void DecisionEngine::run() {
             }
             printf("plane, %4.6f, %4.6f \n", scan.aircraft.getLocation().lat, scan.aircraft.getLocation().lon);
 
-
-
-            /*
-            map.update(scan);
-            Scan mapData = map.getScan();
-
-            ter.update(scan);
-            Scan terData = ter.getScan();
-
-            Selection land;
-            land.update(satData, mapData, terData, scan);
-            Site landing_site = land.getLandingSite();
-            Waypoint way = land.getWaypoints();
-
-
-             */
-
         }
         run_state = false;
     }
