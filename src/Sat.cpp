@@ -109,7 +109,7 @@ cv::Mat Sat::getImage() {
 
     std::stringstream fileNameStm;
     fileNameStm.precision(5);
-    fileNameStm << "SatImageLat" << locMod.lat << "Lon" << locMod.lon << ".bmp";
+    fileNameStm << "res/data/satellite/SatImageLat" << locMod.lat << "Lon" << locMod.lon << ".bmp";
     std::string fileName = fileNameStm.str();
     scan.origin = locMod;
     //Checks if cache exists for the image

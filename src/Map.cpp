@@ -24,7 +24,7 @@ void Map::update(Scan scan) {
 
 void Map::process() {
     // Use Libosmium to read map data
-    osmium::io::Reader reader{"australia.pbf", osmium::osm_entity_bits::node | osmium::osm_entity_bits::way};
+    osmium::io::Reader reader{"res/data/map/australia.pbf", osmium::osm_entity_bits::node | osmium::osm_entity_bits::way};
     index_type index;
     location_handler_type location_handler{index};
     RoadLengthHandler road_length_handler;

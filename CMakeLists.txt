@@ -541,3 +541,11 @@ if(BUILD_DATA_TESTS AND OSM_TESTDATA STREQUAL "OSM_TESTDATA-NOTFOUND")
 endif()
 
 #-----------------------------------------------------------------------------
+#
+#   Copy resource folder
+#
+#-----------------------------------------------------------------------------
+
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/res/ DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/build/res/)
+
+

@@ -19,7 +19,7 @@ void AircraftLink::read(Aircraft* aircraft) {
     //Connect to the ProtoBuf file
     std::fstream input(fileName_in.c_str(), std::ios::in | std::ios::binary);
     if (!aircraftLink.ParseFromIstream(&input)) {
-        std::cerr << "Failed to connect to ProtoBuf file";
+        std::cerr << "Failed to connect to ProtoBuf file" << std::endl;
         return;
     }
 

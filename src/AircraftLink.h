@@ -19,8 +19,8 @@
 
 class AircraftLink {
     mav::AircraftLink aircraftLink;
-    const std::string fileName_in = "aircraftLink_medium_aircraft";
-    const std::string fileName_out = "aircraftLink_medium_waypoints";
+    const std::string fileName_in = "res/protobuf/aircraftLink_medium_aircraft";
+    const std::string fileName_out = "res/protobuf/aircraftLink_medium_waypoints";
 
 public:
     AircraftLink();
