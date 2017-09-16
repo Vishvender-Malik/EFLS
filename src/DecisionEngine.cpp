@@ -34,7 +34,7 @@ void DecisionEngine::run() {
             scan.origin = satData.origin; //Not great, but will work. Should create new method of managing cache.
             //sat.runBuddy();
 
-            scan.data = satData.data;
+            scan.data.create(satData.data.size(), satData.data.type());
             map.update(scan);
             Scan mapData = map.getScan();
             cv::imwrite("test10.bmp",mapData.data);
@@ -46,7 +46,7 @@ void DecisionEngine::run() {
             cv::imwrite("test13.bmp",rawCalFaded);
 
             Selection selection;
-            selection.update(satData, satData, satData, scan);
+            selection.update(satData, mapData, satData, scan);
 
             //Send waypoints to AircraftLink
             aircraftLink.send(selection.getWaypoints());
@@ -58,13 +58,14 @@ void DecisionEngine::run() {
             cv::multiply(sat.getRawImage(), cv::Scalar::all(1), rawFaded, 0.5);
             rawImage.copyTo(rawFaded, temp.data);
             cv::imwrite("test4.bmp",rawFaded);
-            cv::imwrite("test5.bmp",sat.getRawImage());
+            cv::imwrite("finalResults.bmp",selection.getScan().data);
             // Print waypoints
             std::vector<Waypoint> waypoint = selection.getWaypoints();
             for(int i=0; i < (int) waypoint.size(); i++) {
                 printf("%d, %4.6f, %4.6f \n", i, waypoint.at(i).location.lat, waypoint.at(i).location.lon);
             }
             printf("plane, %4.6f, %4.6f \n", scan.aircraft.getLocation().lat, scan.aircraft.getLocation().lon);
+
 
 
             /*
