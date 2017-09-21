@@ -157,27 +157,27 @@ void Selection::setWaypoints(Site site) {
 
     // Final approach - Note: Parameter height, Parameter distance, fixed angle,
     temp.angle = site.angle;
-    temp.location = Convert::coordinateProjection(site.location, 500, temp.angle);
-    temp.altitude = 20;
+    temp.location = Convert::coordinateProjection(site.location, scan.param.landFinalApproachDistance, temp.angle);
+    temp.altitude = scan.param.landFinalApproachAltitude;
     waypoint.push_back(temp);
 
     // End of turn - Note: Variable height, Fixed angle, Fixed distance
     temp.angle = site.angle;
-    temp.location = Convert::coordinateProjection(waypoint.at(1).location, 300, temp.angle);
-    temp.altitude = 40;
+    temp.location = Convert::coordinateProjection(waypoint.at(1).location, scan.param.landEndTurnDistance, temp.angle);
+    temp.altitude = scan.param.landEndTurnAltitude;
     waypoint.push_back(temp);
 
 
     // Final approach turn algorithm
-    double landArcViewTurn = 70;                // The total viewing angle that a waypoint can be accepted within. If a waypoint is not seen, 1/2 of this value is used for the angle of the next waypoint to be plotted at.
-    double landArcViewFinal = 30;               // The total viewing angle that a waypoint can be accepted within, if its on final approach.
-    double landArcDistance = 800;               // Distance between consecutive waypoint during the turn
-    double landArcDistanceFinal = 500;          // Distance between first and second turn waypoints
-    double landArcAcceptDistance = 50;          // ToDo Not required with landing algorithm
-    double landArcPartialAcceptDistance = 1000; // ToDo May not be required with landing algorithm
-    double landArcPartialAcceptAngle = 30;      // ToDo May not be required with landing algorithm
-    double landArcRateOfDescent = 5;            // Rate of descent of the aircraft during approach
-    int landArcMinWaypoint = 2;                 // Minimum number of turn waypoints to plot (total number of waypoints = landArcMinWaypoint + 3)
+    double landArcViewTurn = scan.param.landArcViewTurn;               // The total viewing angle that a waypoint can be accepted within. If a waypoint is not seen, 1/2 of this value is used for the angle of the next waypoint to be plotted at.
+    double landArcViewFinal = scan.param.landArcViewFinal;               // The total viewing angle that a waypoint can be accepted within, if its on final approach.
+    double landArcDistance = scan.param.landArcDistance;              // Distance between consecutive waypoint during the turn
+    double landArcDistanceFinal = scan.param.landArcDistanceFinal;          // Distance between first and second turn waypoints
+    double landArcAcceptDistance = scan.param.landArcAcceptDistance;          // ToDo Not required with landing algorithm
+    double landArcPartialAcceptDistance = scan.param.landArcPartialAcceptDistance; // ToDo May not be required with landing algorithm
+    double landArcPartialAcceptAngle = scan.param.landArcPartialAcceptAngle;      // ToDo May not be required with landing algorithm
+    double landArcRateOfDescent = scan.param.landArcRateOfDescent;            // Rate of descent of the aircraft during approach
+    int landArcMinWaypoint = scan.param.landArcMinWaypoint;                 // Minimum number of turn waypoints to plot (total number of waypoints = landArcMinWaypoint + 3)
 
     bool landArcAccepted = false;
     double landArcView = landArcViewFinal;
@@ -213,6 +213,11 @@ void Selection::setWaypoints(Site site) {
             landArcAccepted = true;
         }
     }
+
+    temp.angle = scan.aircraft.getBearing();
+    temp.location = scan.aircraft.getLocation();
+    temp.altitude = scan.aircraft.getAltitude();
+    waypoint.push_back(temp);
 
     //Flips vector around so waypoint 0, is the first waypoint.
     std::vector<Waypoint> waypointTemp = waypoint;

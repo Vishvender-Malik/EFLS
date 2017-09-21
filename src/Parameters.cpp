@@ -35,6 +35,20 @@ Parameters::Parameters() {
         glide_slope = 10;  //Meters forward for every meter of altitude lost
 
         //Aircraft landing approach parameters
+        landFinalApproachDistance = 300;
+        landFinalApproachAltitude = 20;
+        landEndTurnDistance = 200;
+        landEndTurnAltitude = 30;
+
+        landArcViewTurn = 70;                 // The total viewing angle that a waypoint can be accepted within. If a waypoint is not seen, 1/2 of this value is used for the angle of the next waypoint to be plotted at.
+        landArcViewFinal = 40;                // The total viewing angle that a waypoint can be accepted within, if its on final approach.
+        landArcDistance = 150;                 // Distance between consecutive waypoint during the turn
+        landArcDistanceFinal = 200;            // Distance between first and second turn waypoints
+        landArcAcceptDistance = 25;           // Not required with landing algorithm
+        landArcPartialAcceptDistance = 100;    // May not be required with landing algorithm
+        landArcPartialAcceptAngle = 30;       // May not be required with landing algorithm
+        landArcRateOfDescent = 2;            // Rate of descent of the aircraft during approach
+        landArcMinWaypoint = 3;
 
         //EFLcheck parameters
         throttle_threshold = 30;
@@ -88,9 +102,13 @@ double Parameters::getPriority_range() {
     return priority_range;
 }
 
+
+
 Matrix Parameters::getResolution() {
     return resolution;
 }
+
+
 
 //Setters
 void Parameters::setRunway(double runway_length_new, double runway_width_new) {
