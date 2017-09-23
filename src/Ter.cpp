@@ -8,7 +8,12 @@
 #include <Ter.h>
 
 Ter::Ter() {
-
+    height.resize(SRTM_SIZE);
+    for (int i=0 ; i<SRTM_SIZE; i++)
+        height[i].resize(SRTM_SIZE);
+    grad.resize(GRAD_SIZE);
+    for (int i=0; i<GRAD_SIZE; i++)
+        grad[i].resize(GRAD_SIZE);
 }
 
 size_t Ter::write_data(void *ptr, size_t size, size_t nmemb, FILE *stream) {
@@ -66,23 +71,33 @@ void Ter::processSRTM(const char* fileNameDir) {
 }
 
 void Ter::processGradient() {
-    const int GRAD_SIZE = SRTM_SIZE - 1;
-    double gradient[GRAD_SIZE][GRAD_SIZE] = { { 0 } };
     double tempX, tempY;
+    cv::Mat tempGrad;
+    cv::Size sz;
+    sz.height = GRAD_SIZE;
+    sz.width = GRAD_SIZE;
+    tempGrad.create(sz, scan.data.type());
+
     Location locEnd = locURL;
     locEnd.lon = locEnd.lon + 1;
-    double pixelPerMeterX = Convert::haversine(locURL, locEnd);
+    double meterPerPixelX = Convert::haversine(locURL, locEnd)/SRTM_SIZE;
     locEnd = locURL;
     locEnd.lat = locEnd.lat + 1;
-    double pixelPerMeterY = Convert::haversine(locURL, locEnd);
-    std::cout << "Lon:" << pixelPerMeterX << " Lat:" << pixelPerMeterY << std::endl;
+    double meterPerPixelY = Convert::haversine(locURL, locEnd)/SRTM_SIZE;
+    std::cout << "Lon:" << meterPerPixelX << " Lat:" << meterPerPixelY << std::endl;
 
     for (int i=0; i<GRAD_SIZE; i++) {
         for (int j=0; j<GRAD_SIZE; j++) {
-            tempX = (height[i][j] + height[i][j+1]) / (1/pixelPerMeterX);
-            tempY = (height[i][j] + height[i+1][j]) / (1/pixelPerMeterY);
-            gradient[i][j] = sqrt(pow(tempX,2) + pow(tempY,2));
-            std::cout << gradient[i][j] << " ";
+            tempX = (height[i][j] - height[i][j+1]) / meterPerPixelX;
+            tempY = (height[i][j] - height[i+1][j]) / meterPerPixelY;
+            grad[i][j] = sqrt(pow(tempX,2) + pow(tempY,2));
+            std::cout << tempX << " " << tempY << " " << grad[i][j] << std::endl;
+            if (sqrt(pow(tempX,2) + pow(tempY,2)) > scan.param.terrain_gradient) {
+                tempGrad.at<uchar>(j,i) = 0;
+            }
+            else {
+                tempGrad.at<uchar>(j,i) = 0;
+            }
         }
     }
 }
@@ -111,6 +126,7 @@ void Ter::process() {
 void Ter::update(Scan scan) {
     this->scan = scan;
     this->scan.scanType = ter;
+    this->scan.data = cv::Scalar::all(255);
     process();
 }
 

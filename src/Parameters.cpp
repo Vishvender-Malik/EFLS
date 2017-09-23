@@ -20,6 +20,9 @@ Parameters::Parameters() {
         map_sensitivity_init = 10;   //Sensitivity of scan, initial value
         map_sensitivity;  //Sensitivity of scan
 
+        //Terrain scan parameters
+        terrain_gradient = 0.5;
+
         //Generic scan parameters
         resolution.x = 3000;
         resolution.y = 3000;

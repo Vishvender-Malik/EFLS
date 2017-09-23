@@ -25,7 +25,9 @@
 class Ter {
     const std::string DIR_TER = "res/data/terrain/";
     const static int SRTM_SIZE = 1201;
-    short height[SRTM_SIZE][SRTM_SIZE] = { { 0 } };
+    const static int GRAD_SIZE = SRTM_SIZE - 1;
+    std::vector<std::vector<short> > height;
+    std::vector<std::vector<double> > grad;
     Location locURL;
     Scan scan;
 

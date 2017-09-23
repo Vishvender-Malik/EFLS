@@ -27,6 +27,9 @@ public:
             int map_sensitivity_init;   //Sensitivity of scan, initial value
             int map_sensitivity;  //Sensitivity of scan
 
+            //Terrain scan parametes
+            double terrain_gradient;
+
             //Generic scan parameters
             Matrix resolution;
 
