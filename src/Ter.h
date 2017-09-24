@@ -27,13 +27,12 @@ class Ter {
     const static int SRTM_SIZE = 1201;
     const static int GRAD_SIZE = SRTM_SIZE - 1;
     std::vector<std::vector<short> > height;
-    std::vector<std::vector<double> > grad;
     Location locURL;
     Scan scan;
 
     static size_t write_data(void *ptr, size_t size, size_t nmemb, FILE *stream);
     void downloadSRTM(const char* fileName);
-    void processSRTM(const char* fileName);
+    void processSRTM(const char* fileNameDir);
     void processGradient();
 
 public:

@@ -34,12 +34,12 @@ void DecisionEngine::run() {
             scan.origin = satData.origin; //Not great, but will work. Should create new method of managing cache.
             //sat.runBuddy();
 
-            /*
+
             scan.data.create(satData.data.size(), satData.data.type());
             map.update(scan);
             Scan mapData = map.getScan();
             cv::imwrite("test10.bmp",mapData.data);
-            */
+
 
             cv::Mat rawCalFaded, rawCalImage;
             rawCalImage = cv::imread("satPic.bmp");
@@ -52,7 +52,7 @@ void DecisionEngine::run() {
             cv::imwrite("test20.bmp", terData.data);
 
             Selection selection;
-            selection.update(satData, satData, satData, scan);
+            selection.update(satData, mapData, terData, scan);
 
             //Send waypoints to AircraftLink
             aircraftLink.send(selection.getWaypoints());

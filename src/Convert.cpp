@@ -31,6 +31,12 @@ double Convert::deg2Rad(double angle) {
     return (angle*M_PI)/180;
 }
 
+int Convert::srtmPixel(double origin, double location) {
+    location = abs((location - ((int) origin)) * 60*60);
+    int out = round(location/3);
+    return out;
+}
+
 Location Convert::rad2Deg(Location location) {
     location.lat = rad2Deg(location.lat);
     location.lon = rad2Deg(location.lon);
@@ -41,6 +47,13 @@ Location Convert::deg2Rad(Location location) {
     location.lat = deg2Rad(location.lat);
     location.lon = deg2Rad(location.lon);
     return location;
+}
+
+Matrix Convert::srtmPixel(Location origin, Location location) {
+    Matrix matrix;
+    matrix.y = srtmPixel(origin.lat, location.lat);
+    matrix.x = srtmPixel(origin.lon, location.lon);
+    return matrix;
 }
 
 // Valid method to calculate pixels per meter for Google Satellite images and OSM map data

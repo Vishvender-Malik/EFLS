@@ -11,9 +11,6 @@ Ter::Ter() {
     height.resize(SRTM_SIZE);
     for (int i=0 ; i<SRTM_SIZE; i++)
         height[i].resize(SRTM_SIZE);
-    grad.resize(GRAD_SIZE);
-    for (int i=0; i<GRAD_SIZE; i++)
-        grad[i].resize(GRAD_SIZE);
 }
 
 size_t Ter::write_data(void *ptr, size_t size, size_t nmemb, FILE *stream) {
@@ -48,6 +45,7 @@ void Ter::downloadSRTM(const char* fileName) {
     std::stringstream systemStm;
     systemStm << "unzip -j -q -o " << openStm.str().c_str() << " -d " << DIR_TER;
     std::cout << system(systemStm.str().c_str());
+
 }
 
 void Ter::processSRTM(const char* fileNameDir) {
@@ -90,21 +88,37 @@ void Ter::processGradient() {
         for (int j=0; j<GRAD_SIZE; j++) {
             tempX = (height[i][j] - height[i][j+1]) / meterPerPixelX;
             tempY = (height[i][j] - height[i+1][j]) / meterPerPixelY;
-            grad[i][j] = sqrt(pow(tempX,2) + pow(tempY,2));
-            std::cout << tempX << " " << tempY << " " << grad[i][j] << std::endl;
             if (sqrt(pow(tempX,2) + pow(tempY,2)) > scan.param.terrain_gradient) {
-                tempGrad.at<uchar>(j,i) = 0;
+                tempGrad.at<uchar>(i,j) = 0;
             }
             else {
-                tempGrad.at<uchar>(j,i) = 0;
+                tempGrad.at<uchar>(i,j) = 255;
             }
+            //tempGrad.at<uchar>(j,i) = (int) round(sqrt(pow(tempX,2) + pow(tempY,2)) *255 / scan.param.terrain_gradient);
+            //tempGrad.at<uchar>(i,j) = (int) round((height[i][j]-400)*255/1000);
         }
+    }
+    double dimension = sqrt(pow(scan.param.resolution.x/scan.pixelPerMeter/2,2) + pow(scan.param.resolution.y/scan.pixelPerMeter/2,2));
+    std::cout << dimension << std::endl;
+    Matrix start, end;
+    start = Convert::srtmPixel(scan.origin, Convert::coordinateProjection(scan.origin, dimension, -45));
+    end = Convert::srtmPixel(scan.origin, Convert::coordinateProjection(scan.origin, dimension, 135));
+    if (!(start.x < 0 || start.y < 0 || end.x > GRAD_SIZE || end.y > GRAD_SIZE)) {
+        tempGrad = tempGrad(cv::Rect(start.x, start.y, end.x-start.x, end.y-start.y));
+        sz.width = scan.param.resolution.x;
+        sz.height = scan.param.resolution.y;
+        cv::resize(tempGrad, tempGrad, sz, 0, 0, cv::INTER_NEAREST);
+        cv::imwrite("test32.bmp", tempGrad);
+        scan.data = tempGrad;
+    }
+    else {
+        std::cout << "Terrain: Error, outside of limits. Terrain not used." << std::endl;
     }
 }
 
 void Ter::process() {
     locURL = scan.origin;
-    locURL.lat = abs((int)locURL.lat);
+    locURL.lat = abs((int)locURL.lat-1);
     locURL.lon = abs((int)locURL.lon);
     std::stringstream fileNameStm;
     fileNameStm << "S" << locURL.lat << "E" << locURL.lon << ".hgt";
@@ -112,6 +126,7 @@ void Ter::process() {
     std::stringstream fileNameDirStm;
     fileNameDirStm << DIR_TER << fileName;
     std::string fileNameDir = fileNameDirStm.str();
+
     struct stat buf;
     if (stat(fileNameDir.c_str(), &buf) != 0) {
         downloadSRTM(fileName.c_str());
@@ -120,7 +135,11 @@ void Ter::process() {
         std::cout << "Terrain: Using cache terrain data" << std::endl;
     }
     processSRTM(fileNameDir.c_str());
+
+
+
     processGradient();
+
 }
 
 void Ter::update(Scan scan) {
