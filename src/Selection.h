@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
+#include <exception>
 
 class Selection {
     Scan scan;
@@ -42,6 +43,12 @@ public:
     Scan getScan();
     void update(Scan satData, Scan mapData, Scan terData, Scan generic);
     void process();
+};
+
+struct NoSite : public std::exception {
+    const char * what () const throw() {
+        return "No landing site found, Exception";
+    }
 };
 
 #endif /* SELECTION_H_ */

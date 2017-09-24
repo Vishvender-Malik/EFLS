@@ -19,10 +19,13 @@
 #include <Matrix.h>
 #include <AircraftLink.h>
 #include <iostream>
+#include <stdlib.h>
+#include <time.h>
 
 class DecisionEngine {
     void updateLite();
     void updateSubroutines();
+    void process(Location origin, int level);
 
     Aircraft aircraft;
     Parameters param;
@@ -31,6 +34,7 @@ class DecisionEngine {
     Sat sat;
     Map map;
     Ter ter;
+    int level;
 
 public:
     void run();

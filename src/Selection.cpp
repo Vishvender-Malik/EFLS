@@ -85,7 +85,7 @@ cv::Mat Selection::scanner(cv::Mat input) {
         }
         if (count == 0 && first_run) {  //No location found on first scan -->> Stop search with no found sites
             break_search = true;
-            throw 20;
+            throw NoSite();
         }
         else if (count == 0) {          //No location found on an increase of area scan -->> Reduce site area and force accept
             duplicates = true;

@@ -10,23 +10,24 @@
 Estimator::Estimator() {
 }
 
-bool Estimator::sufficent() {
+bool Estimator::sufficentThrust() {
     if (aircraft.getMotorThrottle() > param.getThrottle_threshold() && aircraft.getMotorCurrent() < param.getCurrent_min()) {
         return false;
     }
     return true;
 }
 
-int Estimator::range() {
-    if (sufficent()) {
-        return -1;
-    }
-    //TODO function for range calculation
-    return 100;
+bool Estimator::sufficentRange(double rangeReq) {
+    return true;
 }
 
 void Estimator::update(Aircraft aircraft, Parameters param) {
     this->aircraft = aircraft;
     this->param = param;
+}
+
+double Estimator::estimateRange() {
+    //ToDo Estimate range equation
+    return 100000;
 }
 

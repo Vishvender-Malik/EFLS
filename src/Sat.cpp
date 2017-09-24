@@ -98,7 +98,7 @@ cv::Mat Sat::fetchImage(Location originFetch) {
 //Returns satellite image, that is made up of 25 smaller images (5x5)
 cv::Mat Sat::getImage() {
     //Creates file name to check and use
-    Location locMod = scan.aircraft.getLocation();
+    Location locMod = scan.origin;
     std::stringstream tempLocMod;
     tempLocMod.precision(5);
     tempLocMod << locMod.lat;
@@ -111,7 +111,7 @@ cv::Mat Sat::getImage() {
     fileNameStm.precision(5);
     fileNameStm << "res/data/satellite/SatImageLat" << locMod.lat << "Lon" << locMod.lon << ".bmp";
     std::string fileName = fileNameStm.str();
-    scan.origin = locMod;
+
     //Checks if cache exists for the image
     cv::Mat images;
     struct stat buf;

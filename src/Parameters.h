@@ -66,6 +66,17 @@ public:
             //Priority parameters
             double priority_range;   //Converts meters of range into a priority level
 
+            // Decision Engine parameters
+            int randomLoc_attempts = 5;
+            double randomLoc_maxDistance = 10000;
+            double randomLoc_minDistance = 3000;
+            double randomLoc_minRange = 5000;
+
+            double levelState_rangeImmediate = 1000;
+            double levelState_rangeHighPriority = 2000;
+
+
+
     //Getters
     int getChunk_size();
     double getChunk_meters();

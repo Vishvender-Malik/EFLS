@@ -16,9 +16,10 @@ class Estimator {
     Parameters param;
 
 public:
-    bool sufficent();
-    int range();
+    bool sufficentThrust();
+    bool sufficentRange(double range);
     void update(Aircraft aircraft, Parameters param);
+    double estimateRange();
 
     Estimator();
 };
