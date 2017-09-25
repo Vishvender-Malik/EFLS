@@ -67,13 +67,18 @@ public:
             double priority_range;   //Converts meters of range into a priority level
 
             // Decision Engine parameters
-            int randomLoc_attempts = 5;
-            double randomLoc_maxDistance = 10000;
-            double randomLoc_minDistance = 3000;
-            double randomLoc_minRange = 5000;
+            int randomLoc_attempts;
+            double randomLoc_maxDistance;
+            double randomLoc_minDistance;
+            double randomLoc_minRange;
 
-            double levelState_rangeImmediate = 1000;
-            double levelState_rangeHighPriority = 2000;
+            double levelState_rangeImmediate;
+            double levelState_rangeHighPriority;
+
+            double largeSearch_minRange;
+            int largeSearch_zoom;
+            double largeSearch_runwayLength;  //Length of runway in meters, initial value
+            double largeSearch_runwayWidth;     //Width of runway in meters, initial value
 
 
 

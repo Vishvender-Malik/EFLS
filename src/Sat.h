@@ -33,7 +33,7 @@ class Sat {
     Scan scan;
 
     static int const edgeThresh = 1;
-    static int const lowThreshold = 70;
+    static int const lowThreshold = 80;
     static int const max_lowThreshold = 100;
     static int const ratio = 3;
     static int const kernel_size = 3;

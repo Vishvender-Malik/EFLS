@@ -26,6 +26,7 @@ class DecisionEngine {
     void updateLite();
     void updateSubroutines();
     void process(Location origin, int level);
+    Location processLargeSearch(Scan scan);
 
     Aircraft aircraft;
     Parameters param;

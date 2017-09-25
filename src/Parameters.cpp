@@ -60,6 +60,21 @@ Parameters::Parameters() {
         //Priority parameters
         priority_range = 0.0001;   //Converts meters of range into a priority level
 
+        // Decision Engine parameters
+        randomLoc_attempts = 5;
+        randomLoc_maxDistance = 10000;
+        randomLoc_minDistance = 3000;
+        randomLoc_minRange = 5000;
+
+        levelState_rangeImmediate = 1000;
+        levelState_rangeHighPriority = 2000;
+
+        largeSearch_minRange = 20000;
+        largeSearch_zoom = 14;
+        largeSearch_runwayLength = 1000;
+        largeSearch_runwayWidth = 1000;
+
+
     refresh();
 }
 

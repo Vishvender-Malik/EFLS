@@ -28,7 +28,7 @@ struct Scan {
     int zoom;
     double pixelPerMeter;
 
-    int sensitivity;
+    int level;
 
     cv::Mat data;
 };

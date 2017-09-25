@@ -113,6 +113,12 @@ void Ter::processGradient() {
     }
     else {
         std::cout << "Terrain: Error, outside of limits. Terrain not used." << std::endl;
+        tempGrad = cv::Scalar::all(255);
+        sz.width = scan.param.resolution.x;
+        sz.height = scan.param.resolution.y;
+        cv::resize(tempGrad, tempGrad, sz, 0, 0, cv::INTER_NEAREST);
+        cv::imwrite("test51.bmp", tempGrad);
+        scan.data = tempGrad;
     }
 }
 

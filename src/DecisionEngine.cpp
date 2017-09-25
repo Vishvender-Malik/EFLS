@@ -21,7 +21,7 @@ void DecisionEngine::run() {
             // Initial attempt at origin
             Location origin;
             bool foundSite = false;
-            level = 10;
+            level = 11;
             while (!foundSite) {
                 origin = aircraft.getLocation();
 
@@ -34,15 +34,57 @@ void DecisionEngine::run() {
                 }
 
                 // Last search for a landing site
-                else if (!estimator.sufficentRange(param.levelState_rangeHighPriority)) {
+                else if (level == 2) {
                     std::cout << "DecisionEngine: Last search for a safe landing site" << std::endl;
-                    level = 2;
+                    level = 3;
                     try {
                         process(origin, level);
                         foundSite = true;
                     } catch (NoSite& e) {
                         std::cout << "DecisionEngine: Failed to find site" << std::endl;
                         level = 1;
+                    }
+                }
+
+                // Second last search for a landing site
+                else if (!estimator.sufficentRange(param.levelState_rangeHighPriority) || level == 3) {
+                    std::cout << "DecisionEngine: Second last search for a safe landing site" << std::endl;
+                    level = 3;
+                    try {
+                        process(origin, level);
+                        foundSite = true;
+                    } catch (NoSite& e) {
+                        std::cout << "DecisionEngine: Failed to find site" << std::endl;
+                        level = 2;
+                    }
+                }
+
+                //Large search area --> finds a landing site a far distance away
+                else if (estimator.sufficentRange(param.largeSearch_minRange) && level == 11) {
+                    try {
+                        std::cout << "DecisionEngine: Landing location search from far zoom level" << std::endl;
+
+                        Parameters paramTemp = param;
+                        paramTemp.runway_length = param.largeSearch_runwayLength;
+                        paramTemp.runway_width = param.largeSearch_runwayWidth;
+                        Scan scan;
+                        scan.param = paramTemp;
+                        scan.aircraft = aircraft;
+                        scan.origin = origin;
+                        scan.zoom = param.largeSearch_zoom;
+                        scan.pixelPerMeter = Convert::pixelPerMeter(scan.zoom, scan.aircraft.getLocation().lat); //The latitude should be the center of the image, however the assumption that the aircraft is near the center of the map should be valid for all cases (I hope), otherwise call this method inside of the Sat::getImage() function.
+                        scan.level = level;
+                        scan.processed = false;
+                        scan.scanType = generic;
+
+                        Location locSite = processLargeSearch(scan);
+
+                        std::cout << "DecisionEngine: Found a valid landing location, now finding a specific site" << std::endl;
+                        process(locSite, level);
+                        foundSite = true;
+                    } catch (NoSite& e) {
+                        std::cout << "DecisionEngine: Failed to find landing location or site" << std::endl;
+                        level = 10;
                     }
                 }
 
@@ -80,8 +122,10 @@ void DecisionEngine::run() {
                             }
                         }
                     }
-                    level -= 1;
-                    std::cout << "DecisionEngine: Changed land threshold to: " << level << std::endl;
+                    if (!foundSite) {
+                        level -= 1;
+                        std::cout << "DecisionEngine: Changed land threshold to: " << level << std::endl;
+                    }
                 }
             }
         }
@@ -102,6 +146,32 @@ void DecisionEngine::updateSubroutines() {
     //
 }
 
+Location DecisionEngine::processLargeSearch(Scan scan) {
+    updateSubroutines();
+
+    sat.update(scan);
+    sat.save();
+    Scan satData = sat.getScan();
+    cv::imwrite("test40a.bmp", satData.data);
+
+    scan.data.create(satData.data.size(), satData.data.type());
+    map.update(scan);
+    Scan mapData = map.getScan();
+    cv::imwrite("test40.bmp",mapData.data);
+
+    scan.data.create(satData.data.size(), satData.data.type());
+    ter.update(scan);
+    Scan terData = ter.getScan();
+    cv::imwrite("test41.bmp", terData.data);
+
+
+    Selection selection;
+    selection.update(satData, mapData, terData, scan);
+    cv::imwrite("finalResultsLarge.bmp",selection.getScan().data);
+
+    return selection.getLandingSite().location;
+}
+
 void DecisionEngine::process(Location origin, int level) {
     updateSubroutines();
 
@@ -109,24 +179,26 @@ void DecisionEngine::process(Location origin, int level) {
     scan.param = param;
     scan.aircraft = aircraft;
     scan.origin = origin;
-    //scan.origin = aircraft.getLocation(); --This is set in Sat::getImage()
     scan.zoom = 16;
     scan.pixelPerMeter = Convert::pixelPerMeter(scan.zoom, scan.aircraft.getLocation().lat); //The latitude should be the center of the image, however the assumption that the aircraft is near the center of the map should be valid for all cases (I hope), otherwise call this method inside of the Sat::getImage() function.
-    scan.sensitivity = 10;
+    scan.level = level;
     scan.processed = false;
     scan.scanType = generic;
 
     sat.update(scan);
     sat.save();
     Scan satData = sat.getScan();
-    scan.origin = satData.origin; //Not great, but will work. Should create new method of managing cache.
-    //sat.runBuddy();
 
-
-    scan.data.create(satData.data.size(), satData.data.type());
-    map.update(scan);
-    Scan mapData = map.getScan();
-    cv::imwrite("test10.bmp",mapData.data);
+    Scan mapData;
+    if (scan.level >= 3) {
+        scan.data.create(satData.data.size(), satData.data.type());
+        map.update(scan);
+        mapData = map.getScan();
+        cv::imwrite("test10.bmp",mapData.data);
+    }
+    else {
+        mapData = satData;
+    }
 
 
     cv::Mat rawCalFaded, rawCalImage;
@@ -135,9 +207,15 @@ void DecisionEngine::process(Location origin, int level) {
     rawCalImage.copyTo(rawCalFaded, map.getScan().data);
     cv::imwrite("test13.bmp",rawCalFaded);
 
-    ter.update(scan);
-    Scan terData = ter.getScan();
-    cv::imwrite("test20.bmp", terData.data);
+    Scan terData;
+    if (scan.level > 7) {
+        ter.update(scan);
+        terData = ter.getScan();
+        cv::imwrite("test20.bmp", terData.data);
+    }
+    else {
+        terData = satData;
+    }
 
     Selection selection;
     selection.update(satData, mapData, terData, scan);

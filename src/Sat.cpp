@@ -56,7 +56,8 @@ cv::Mat Sat::cannyDetection(cv::Mat src) {
     cv::Mat src_gray, edges, edges_invert;
     cv::cvtColor(src, src_gray, CV_BGR2GRAY );
     cv::blur(src_gray, edges, cv::Size(3, 3));
-    cv::Canny(edges, edges, lowThreshold, lowThreshold * ratio, kernel_size);
+    int lowThresholdTemp = lowThreshold - (20 - scan.level*2);
+    cv::Canny(edges, edges, lowThresholdTemp, lowThresholdTemp * ratio, kernel_size);
     edges_invert.create(edges.size(), edges.type());
     cv::subtract(cv::Scalar::all(255),edges, edges_invert);
     cv::imwrite("test.bmp",edges_invert);
@@ -109,7 +110,7 @@ cv::Mat Sat::getImage() {
 
     std::stringstream fileNameStm;
     fileNameStm.precision(5);
-    fileNameStm << "res/data/satellite/SatImageLat" << locMod.lat << "Lon" << locMod.lon << ".bmp";
+    fileNameStm << "res/data/satellite/SatImageLat" << locMod.lat << "Lon" << locMod.lon << "Zoom" << scan.zoom << ".bmp";
     std::string fileName = fileNameStm.str();
 
     //Checks if cache exists for the image

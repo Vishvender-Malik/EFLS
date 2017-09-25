@@ -27,8 +27,11 @@ Scan Selection::getScan() {
 void Selection::update(Scan satData, Scan mapData, Scan terData, Scan generic) {
     scan = generic;
     scan.data = (cv::Scalar::all(255)-satData.data);
+    cv::imwrite("RawInputSelection1.bmp",scan.data);
     scan.data += (cv::Scalar::all(255)-mapData.data);
+    cv::imwrite("RawInputSelection2.bmp",scan.data);
     scan.data += (cv::Scalar::all(255)-terData.data);
+    cv::imwrite("RawInputSelection3.bmp",scan.data);
     scan.data = cv::Scalar::all(255) - scan.data;
     //scan.data = -(-satData.data - mapData.data - terData.data);
     cv::imwrite("RawInputSelection.bmp",scan.data);
