@@ -12,6 +12,7 @@
 #include <Parameters.h>
 #include <Scan.h>
 #include <MapBuilder.h>
+#include <FileWriter.h>
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include <sstream>

@@ -19,7 +19,7 @@ Scan Sat::getScan() {
 void Sat::update(Scan scan) {
     this->scan = scan;
     this->scan.scanType = sat;
-    process();  //Need this line of code for processing!!!
+    process();
 }
 
 void Sat::save() {
@@ -31,36 +31,21 @@ void Sat::save() {
     cv::imwrite("result.bmp", dst);
 }
 
-cv::Mat Sat::lineExpansion(cv::Mat input) {
-    cv::Mat edges;
-    cv::Size sz = input.size();
-    edges.create(input.size(), input.type());
-    edges = cv::Scalar::all(255);
-    int boundary = 3;   //ToDo make parameter
-    for (int i = boundary; i < sz.height - boundary; i++) {
-        for (int j = boundary; j < sz.width - boundary; j++) {
-            if (input.at<uchar>(i,j) == 0) {
-                for (int k = 0; k < 5; k++) {
-                    for (int l = 0; l < 5; l++) {
-                        edges.at<uchar>(i+k-boundary, j+l-boundary) = 0;
-                    }
-                }
-            }
-        }
-    }
-    return edges;
-}
-
 // Note:: Black pixel is edges and white pixel is valid area
 cv::Mat Sat::cannyDetection(cv::Mat src) {
+    FileWriter time("canny");
+    std::cout << "Sat: Processing Canny edge detection" << std::endl;
+
     cv::Mat src_gray, edges, edges_invert;
     cv::cvtColor(src, src_gray, CV_BGR2GRAY );
     cv::blur(src_gray, edges, cv::Size(3, 3));
     int lowThresholdTemp = lowThreshold - (20 - scan.level*2);
     cv::Canny(edges, edges, lowThresholdTemp, lowThresholdTemp * ratio, kernel_size);
+
     edges_invert.create(edges.size(), edges.type());
     cv::subtract(cv::Scalar::all(255),edges, edges_invert);
-    cv::imwrite("test.bmp",edges_invert);
+
+    time.end();
     return edges_invert;
 }
 
@@ -77,7 +62,7 @@ cv::Mat Sat::fetchImage(Location originFetch) {
     urlstm.precision(10);
     urlstm << "http://maps.googleapis.com/maps/api/staticmap?maptype=satellite&center=" << originFetch.lat << "," << originFetch.lon << "&zoom=" << scan.zoom << "&size=640x640&key=AIzaSyC2C3Q5lTuaYkaw7m8A9XLDgq7avZuMxQ4";
     std::string url = urlstm.str();
-    std::cout << url << "\n";
+
     //Fetch image
     CURL *curl;
     CURLcode res;
@@ -98,6 +83,7 @@ cv::Mat Sat::fetchImage(Location originFetch) {
 
 //Returns satellite image, that is made up of 25 smaller images (5x5)
 cv::Mat Sat::getImage() {
+    FileWriter time("getSatelliteImage");
     //Creates file name to check and use
     Location locMod = scan.origin;
     std::stringstream tempLocMod;
@@ -117,10 +103,13 @@ cv::Mat Sat::getImage() {
     cv::Mat images;
     struct stat buf;
     if (stat(fileName.c_str(), &buf) == 0) {
-        std::cout << "Using cached satellite image.\n";
+        std::cout << "Sat: Using cached satellite image" << std::endl;
         images = cv::imread(fileName);
+        time.end();
         return images;
     }
+
+    std::cout << "Sat: Downloading satellite image" << std::endl;
     double angle;
     double pixelDimension = 600;
     double distance;
@@ -149,33 +138,33 @@ cv::Mat Sat::getImage() {
         }
     }
     cv::imwrite(fileName, images);
+
+    time.end();
     return images;
 }
 
 void Sat::process() {
+    FileWriter time("processSatellite");
+    std::cout << "Sat: Started" << std::endl;
+
     cv::Mat src, dst;
     src = getImage();
     rawImage = src;
-    cv::imwrite("satPic.bmp", src);
     dst.create( src.size(), src.type() );
     cv::Mat detected_edges;
     detected_edges = cannyDetection(src);
-    detected_edges = lineExpansion(detected_edges);
+    detected_edges = Convert::lineExpansion(detected_edges);
 
     scan.data = detected_edges;
     scan.processed = true;
+
+    cv::imwrite(FileWriter::cwd("satelliteImage.bmp"), src);
+    cv::imwrite(FileWriter::cwd("satelliteImageProcessed.bmp"), detected_edges);
+
+    time.end();
 }
 
 cv::Mat Sat::getRawImage() {
     return rawImage;
-}
-
-void Sat::runBuddy() {
-    cv::Mat image = getImage();
-    cv::imwrite("large.bmp", image);
-    cv::namedWindow("Image output", CV_WINDOW_AUTOSIZE);
-    cv::imshow("Image output", image); //display image
-    cvWaitKey(0); // press any key to exit
-    cv::destroyWindow("Image output");
 }
 

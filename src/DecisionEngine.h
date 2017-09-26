@@ -18,6 +18,7 @@
 #include <Selection.h>
 #include <Matrix.h>
 #include <AircraftLink.h>
+#include <FileWriter.h>
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>

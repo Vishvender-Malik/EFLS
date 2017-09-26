@@ -8,6 +8,7 @@
 #include <Ter.h>
 
 Ter::Ter() {
+    // Could not use C array due to memory issues, so had to use vector
     height.resize(SRTM_SIZE);
     for (int i=0 ; i<SRTM_SIZE; i++)
         height[i].resize(SRTM_SIZE);
@@ -27,7 +28,7 @@ void Ter::downloadSRTM(const char* fileName) {
     urlstm << "http://firmware.ardupilot.org/SRTM/Australia/" << fileName << ".zip";
     std::string url = urlstm.str();
     std::cout << url << std::endl;
-    //Fetch image
+    //Fetch terrain data
     CURL *curl;
     CURLcode res;
     FILE *fp;
@@ -45,7 +46,6 @@ void Ter::downloadSRTM(const char* fileName) {
     std::stringstream systemStm;
     systemStm << "unzip -j -q -o " << openStm.str().c_str() << " -d " << DIR_TER;
     std::cout << system(systemStm.str().c_str());
-
 }
 
 void Ter::processSRTM(const char* fileNameDir) {
@@ -69,6 +69,8 @@ void Ter::processSRTM(const char* fileNameDir) {
 }
 
 void Ter::processGradient() {
+    std::cout << "Terrain: Processing the terrain gradient" << std::endl;
+
     double tempX, tempY;
     cv::Mat tempGrad;
     cv::Size sz;
@@ -82,7 +84,6 @@ void Ter::processGradient() {
     locEnd = locURL;
     locEnd.lat = locEnd.lat + 1;
     double meterPerPixelY = Convert::haversine(locURL, locEnd)/SRTM_SIZE;
-    std::cout << "Lon:" << meterPerPixelX << " Lat:" << meterPerPixelY << std::endl;
 
     for (int i=0; i<GRAD_SIZE; i++) {
         for (int j=0; j<GRAD_SIZE; j++) {
@@ -99,7 +100,6 @@ void Ter::processGradient() {
         }
     }
     double dimension = sqrt(pow(scan.param.resolution.x/scan.pixelPerMeter/2,2) + pow(scan.param.resolution.y/scan.pixelPerMeter/2,2));
-    std::cout << dimension << std::endl;
     Matrix start, end;
     start = Convert::srtmPixel(scan.origin, Convert::coordinateProjection(scan.origin, dimension, -45));
     end = Convert::srtmPixel(scan.origin, Convert::coordinateProjection(scan.origin, dimension, 135));
@@ -108,21 +108,22 @@ void Ter::processGradient() {
         sz.width = scan.param.resolution.x;
         sz.height = scan.param.resolution.y;
         cv::resize(tempGrad, tempGrad, sz, 0, 0, cv::INTER_NEAREST);
-        cv::imwrite("test32.bmp", tempGrad);
         scan.data = tempGrad;
     }
     else {
         std::cout << "Terrain: Error, outside of limits. Terrain not used." << std::endl;
+        // Below code should not be required as its already set to all(255), however the Selector.cpp will not work without this
         tempGrad = cv::Scalar::all(255);
         sz.width = scan.param.resolution.x;
         sz.height = scan.param.resolution.y;
         cv::resize(tempGrad, tempGrad, sz, 0, 0, cv::INTER_NEAREST);
-        cv::imwrite("test51.bmp", tempGrad);
         scan.data = tempGrad;
     }
 }
 
 void Ter::process() {
+    std::cout << "Terrain: Started" << std::endl;
+
     locURL = scan.origin;
     locURL.lat = abs((int)locURL.lat-1);
     locURL.lon = abs((int)locURL.lon);
@@ -133,6 +134,7 @@ void Ter::process() {
     fileNameDirStm << DIR_TER << fileName;
     std::string fileNameDir = fileNameDirStm.str();
 
+    FileWriter time1("terDownload");
     struct stat buf;
     if (stat(fileNameDir.c_str(), &buf) != 0) {
         downloadSRTM(fileName.c_str());
@@ -140,12 +142,17 @@ void Ter::process() {
     else {
         std::cout << "Terrain: Using cache terrain data" << std::endl;
     }
+    time1.end();
+
+    FileWriter time2("terRead");
     processSRTM(fileNameDir.c_str());
+    time2.end();
 
-
-
+    FileWriter time3("terGrad");
     processGradient();
+    time3.end();
 
+    cv::imwrite(FileWriter::cwd("terrain.bmp"), scan.data);
 }
 
 void Ter::update(Scan scan) {

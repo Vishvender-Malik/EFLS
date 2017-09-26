@@ -23,7 +23,6 @@
 
 class Sat {
     cv::Mat cannyDetection(cv::Mat);
-    cv::Mat lineExpansion(cv::Mat);
     cv::Mat getImage();
     cv::Mat fetchImage(Location originFetch);
     static size_t write_data(char *ptr, size_t size, size_t nmemb, void *userdata);
@@ -44,7 +43,6 @@ public:
     void update(Scan scan);
     void process();
     void save();
-    void runBuddy();
     cv::Mat getRawImage();
 };
 

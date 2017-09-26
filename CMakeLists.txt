@@ -521,7 +521,7 @@ include(CPack)
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/src")
 link_directories("/usr/local/lib")
 message(STATUS "Configuring examples - Building these examples:")
-add_executable(EFLS "src/EFLS.cpp" "src/Aircraft.cpp" "src/AircraftLink.cpp" "src/Convert.cpp" "src/DecisionEngine.cpp" "src/Estimator.cpp" "src/Map.cpp" "src/Parameters.cpp" "src/Priority.cpp" "src/Sat.cpp" "src/Selection.cpp" "src/Ter.cpp" "src/mavProxyLink.pb.cc" "src/MapBuilder.cpp")
+add_executable(EFLS "src/EFLS.cpp" "src/Aircraft.cpp" "src/AircraftLink.cpp" "src/Convert.cpp" "src/DecisionEngine.cpp" "src/Estimator.cpp" "src/Map.cpp" "src/Parameters.cpp" "src/Priority.cpp" "src/Sat.cpp" "src/Selection.cpp" "src/Ter.cpp" "src/mavProxyLink.pb.cc" "src/MapBuilder.cpp" "src/FileWriter.cpp")
 set_pthread_on_target(EFLS)
 target_link_libraries(EFLS ${OSMIUM_IO_LIBRARIES} "opencv_core" "opencv_imgproc" "opencv_highgui" "opencv_calib3d" "opencv_flann" "opencv_imgcodecs" "opencv_photo" "opencv_objdetect" "opencv_shape" "opencv_stitching" "opencv_superres" "opencv_video" "opencv_videoio" "opencv_videostab" "opencv_features2d" "curl" "protobuf")
 

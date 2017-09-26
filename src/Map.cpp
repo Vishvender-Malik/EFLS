@@ -23,17 +23,27 @@ void Map::update(Scan scan) {
 }
 
 void Map::process() {
+    std::cout << "Map: Started" << std::endl;
+
     // Use Libosmium to read map data
+    FileWriter time1("mapRead");
+    std::cout << "Map: Reading OSM data" << std::endl;
     osmium::io::Reader reader{"res/data/map/australia.pbf", osmium::osm_entity_bits::node | osmium::osm_entity_bits::way};
     index_type index;
     location_handler_type location_handler{index};
     RoadLengthHandler road_length_handler;
     osmium::apply(reader, location_handler, road_length_handler);
+    time1.end();
 
     // Retrieve the processed map data
+    FileWriter time2("mapProcess");
+    std::cout << "Map: Processing OSM data" << std::endl;
     MapBuilder::sharedMapBuilder().process();
     scan = MapBuilder::sharedMapBuilder().getScan();
     scan.data = Convert::lineExpansion(scan.data);
+    time2.end();
+
+    cv::imwrite(FileWriter::cwd("Map.bmp"), scan.data);
 }
 
 // Libosmium custom handler

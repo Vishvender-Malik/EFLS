@@ -147,6 +147,7 @@ Matrix Convert::coordinate2Matrix(Location origin, Location location, Matrix dim
 }
 
 cv::Mat Convert::lineExpansion(cv::Mat input) {
+    FileWriter time("lineExpansion");
     cv::Mat edges;
     cv::Size sz = input.size();
     edges.create(input.size(), input.type());
@@ -163,5 +164,7 @@ cv::Mat Convert::lineExpansion(cv::Mat input) {
             }
         }
     }
+
+    time.end();
     return edges;
 }

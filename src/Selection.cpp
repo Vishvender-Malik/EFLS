@@ -27,19 +27,18 @@ Scan Selection::getScan() {
 void Selection::update(Scan satData, Scan mapData, Scan terData, Scan generic) {
     scan = generic;
     scan.data = (cv::Scalar::all(255)-satData.data);
-    cv::imwrite("RawInputSelection1.bmp",scan.data);
     scan.data += (cv::Scalar::all(255)-mapData.data);
-    cv::imwrite("RawInputSelection2.bmp",scan.data);
     scan.data += (cv::Scalar::all(255)-terData.data);
-    cv::imwrite("RawInputSelection3.bmp",scan.data);
     scan.data = cv::Scalar::all(255) - scan.data;
     //scan.data = -(-satData.data - mapData.data - terData.data);
-    cv::imwrite("RawInputSelection.bmp",scan.data);
+    cv::imwrite(FileWriter::cwd("selectionRaw.bmp"),scan.data);
     process();
 }
 
 // Finds a valid site for landing
 cv::Mat Selection::scanner(cv::Mat input) {
+    std::cout << "Selection: Scanning for a landing site" << std::endl;
+
     int dimension_length, dimension_width, dimension_skip;
     int dimension_length_previous, dimension_width_previous;
     bool break_search = false;
@@ -147,6 +146,7 @@ cv::Mat Selection::unRotateImage(cv::Mat original, cv::Mat input, double angle) 
 
 //ToDo Replace altitude value with parameters or algorithm. Also needs to be based on terrain
 void Selection::setWaypoints(Site site) {
+    std::cout << "Selection: Calculating flight path to landing sites" << std::endl;
     Waypoint temp;
     waypoint.clear();
     waypoint.reserve(20);
@@ -261,11 +261,22 @@ cv::Mat Selection::removeMarker(cv::Mat input) {
 }
 
 void Selection::process() {
+    FileWriter time("selectionProcess");
+    std::cout << "Selection: Starting" << std::endl;
+
     site.angle = Convert::wrapTo180(180 + scan.aircraft.getWindDirection());
     scan.data = unRotateImage(scan.data, scanner(rotateImage(scan.data, site.angle)), site.angle);
     site.location = Convert::matrix2Coordinate(scan.origin, calcLandSite(scan.data), scan.pixelPerMeter);
     scan.data = removeMarker(scan.data);    //ToDo replace unrotate method with calculation based method
+    time.end();
+
+    FileWriter time1("selectionWaypoint");
     setWaypoints(site);
     scan.processed = true;
+    time1.end();
+
+    cv::imwrite(FileWriter::cwd("selectionSite.bmp"), scan.data);
+
+
 }
 

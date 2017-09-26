@@ -18,9 +18,16 @@
 
 using namespace std;
 
-int main() {
+int main(int argc, char* argv[]) {
+    // Writes a title to the data.txt file, if provided
+    if (argc == 1) {
+        FileWriter::write("\n");
+        FileWriter::write(argv[0]);
+    }
+    FileWriter globalTime("GlobalTime");
     DecisionEngine DE;
     DE.run();
+    globalTime.end();
     return 0;
 }
 
