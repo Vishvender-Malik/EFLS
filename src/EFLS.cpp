@@ -20,9 +20,9 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
     // Writes a title to the data.txt file, if provided
-    if (argc == 1) {
+    if (argc == 2) {
         FileWriter::write("\n");
-        FileWriter::write(argv[0]);
+        FileWriter::write(argv[1]);
     }
     FileWriter globalTime("GlobalTime");
     DecisionEngine DE;

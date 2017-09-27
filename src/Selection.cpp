@@ -31,7 +31,7 @@ void Selection::update(Scan satData, Scan mapData, Scan terData, Scan generic) {
     scan.data += (cv::Scalar::all(255)-terData.data);
     scan.data = cv::Scalar::all(255) - scan.data;
     //scan.data = -(-satData.data - mapData.data - terData.data);
-    cv::imwrite(FileWriter::cwd("selectionRaw.bmp"),scan.data);
+    cv::imwrite(FileWriter::cwdVariable("selectionRaw.bmp"),scan.data);
     process();
 }
 
@@ -275,7 +275,7 @@ void Selection::process() {
     scan.processed = true;
     time1.end();
 
-    cv::imwrite(FileWriter::cwd("selectionSite.bmp"), scan.data);
+    cv::imwrite(FileWriter::cwdVariable("selectionSite.bmp"), scan.data);
 
 
 }

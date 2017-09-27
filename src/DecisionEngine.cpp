@@ -15,8 +15,14 @@ void DecisionEngine::run() {
     bool run_state = true;      // Runs decision engine continuously
     while (run_state) {
         updateLite();
+        int counter = 0;
         if (!estimator.sufficentThrust() || true) {
             std::cout << "DecisionEngine: Emergency Forced Landing is required" << std::endl;
+
+            counter++;
+            std::stringstream variablePath;
+            variablePath << "/home/dello/workspace/EFLS/build/results/temp/test" << counter << "/";
+            FileWriter::setCwdVariable(variablePath.str().c_str());
 
             Location origin;
             bool foundSite = false;
@@ -83,6 +89,13 @@ void DecisionEngine::run() {
                         Location locSite = processLargeSearch(scan);
 
                         std::cout << "DecisionEngine: Found a valid landing location, now finding a specific site" << std::endl;
+
+                        counter++;
+                        std::stringstream variablePath;
+                        variablePath << "/home/dello/workspace/EFLS/build/results/temp/test" << counter << "/";
+                        FileWriter::setCwdVariable(variablePath.str().c_str());
+
+                        FileWriter::write("\nSpecific Search");
                         process(locSite, level);
                         foundSite = true;
                     } catch (NoSite& e) {
@@ -107,6 +120,11 @@ void DecisionEngine::run() {
                         for (int i=0; i<param.randomLoc_attempts; i++) {
                             if (estimator.sufficentRange(param.randomLoc_minRange)) {
                                 std::cout << "DecisionEngine: Landing site search started, Lat: " << origin.lat << "Lon: " << origin.lon << std::endl;
+
+                                counter++;
+                                std::stringstream variablePath;
+                                variablePath << "/home/dello/workspace/EFLS/build/results/temp/test" << counter << "/";
+                                FileWriter::setCwdVariable(variablePath.str().c_str());
 
                                 try {
                                     FileWriter::write("\nRandom Search");
@@ -235,10 +253,10 @@ void DecisionEngine::process(Location origin, int level) {
 
     //Display results
         cv::Mat rawCalFaded, rawCalImage;
-    rawCalImage = cv::imread(FileWriter::cwd("satelliteImage.bmp"));
+    rawCalImage = cv::imread(FileWriter::cwdVariable("satelliteImage.bmp"));
     cv::multiply(rawCalImage, cv::Scalar::all(1), rawCalFaded, 0.5);
     rawCalImage.copyTo(rawCalFaded, selection.getScan().data);
-    cv::imwrite(FileWriter::cwd("landingSiteDisplayed.bmp"),rawCalFaded);
+    cv::imwrite(FileWriter::cwdVariable("landingSiteDisplayed.bmp"),rawCalFaded);
 
     // Print waypoints
     std::cout << "DecisionEngine: Displaying waypoints to safe landing site" << std::endl;

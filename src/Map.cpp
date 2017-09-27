@@ -43,7 +43,7 @@ void Map::process() {
     scan.data = Convert::lineExpansion(scan.data);
     time2.end();
 
-    cv::imwrite(FileWriter::cwd("Map.bmp"), scan.data);
+    cv::imwrite(FileWriter::cwdVariable("Map.bmp"), scan.data);
 }
 
 // Libosmium custom handler

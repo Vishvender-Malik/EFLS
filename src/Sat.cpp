@@ -158,8 +158,8 @@ void Sat::process() {
     scan.data = detected_edges;
     scan.processed = true;
 
-    cv::imwrite(FileWriter::cwd("satelliteImage.bmp"), src);
-    cv::imwrite(FileWriter::cwd("satelliteImageProcessed.bmp"), detected_edges);
+    cv::imwrite(FileWriter::cwdVariable("satelliteImage.bmp"), src);
+    cv::imwrite(FileWriter::cwdVariable("satelliteImageProcessed.bmp"), detected_edges);
 
     time.end();
 }

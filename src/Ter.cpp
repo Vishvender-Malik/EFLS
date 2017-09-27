@@ -152,7 +152,7 @@ void Ter::process() {
     processGradient();
     time3.end();
 
-    cv::imwrite(FileWriter::cwd("terrain.bmp"), scan.data);
+    cv::imwrite(FileWriter::cwdVariable("terrain.bmp"), scan.data);
 }
 
 void Ter::update(Scan scan) {
