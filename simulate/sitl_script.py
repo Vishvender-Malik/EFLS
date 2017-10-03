@@ -71,8 +71,8 @@ for loop in range(0,20):
     print("Closing SITL")
     mavproxy.close(force=True)
     
-    oldName = "/home/dello/workspace/EFLS/build/results/temp"
-    newName = "/home/dello/workspace/EFLS/build/results/Test" + str(loop) 
+    oldName = "/home/dello/EFLS/build/results/temp"
+    newName = "/home/dello/EFLS/build/results/Test" + str(loop) 
     cmdName = "mv " + oldName + " " + newName
     cmdNameMk = "mkdir " + oldName
     os.system(cmdName)
