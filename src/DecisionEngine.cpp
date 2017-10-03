@@ -21,7 +21,7 @@ void DecisionEngine::run() {
 
             counter++;
             std::stringstream variablePath;
-            variablePath << "/home/dello/workspace/EFLS/build/results/temp/test" << counter << "/";
+            variablePath << "/home/dello/EFLS/build/results/temp/test" << counter << "/";
             FileWriter::setCwdVariable(variablePath.str().c_str());
 
             Location origin;
@@ -92,7 +92,7 @@ void DecisionEngine::run() {
 
                         counter++;
                         std::stringstream variablePath;
-                        variablePath << "/home/dello/workspace/EFLS/build/results/temp/test" << counter << "/";
+                        variablePath << "/home/dello/EFLS/build/results/temp/test" << counter << "/";
                         FileWriter::setCwdVariable(variablePath.str().c_str());
 
                         FileWriter::write("\nSpecific Search");
@@ -123,7 +123,7 @@ void DecisionEngine::run() {
 
                                 counter++;
                                 std::stringstream variablePath;
-                                variablePath << "/home/dello/workspace/EFLS/build/results/temp/test" << counter << "/";
+                                variablePath << "/home/dello/EFLS/build/results/temp/test" << counter << "/";
                                 FileWriter::setCwdVariable(variablePath.str().c_str());
 
                                 try {

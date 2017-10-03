@@ -9,7 +9,7 @@
 
 using namespace std;
 
-string FileWriter::cwdVar = "/home/dello/workspace/EFLS/build/results/temp/";
+string FileWriter::cwdVar = "/home/dello/EFLS/build/results/temp/";
 
 FileWriter::FileWriter(const char* timeName) {
     this->timeName = timeName;
@@ -44,7 +44,7 @@ void FileWriter::write(const char* input){
 
 string FileWriter::cwd(const char* input) {
     stringstream message;
-    message << "/home/dello/workspace/EFLS/build/results/temp/" << input;
+    message << "/home/dello/EFLS/build/results/temp/" << input;
     string messageStr = message.str();
     return messageStr;
 }

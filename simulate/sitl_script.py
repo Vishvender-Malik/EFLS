@@ -65,11 +65,13 @@ for loop in range(0,20):
     efls = pexpect.spawn("python EFLS_start.py", timeout=600)
     
     mavproxy.expect("Auto disarmed")
+    #mavproxy.send('module unload map\n')
     wait_time(mav, 10)
     #mavproxy.logfile = None
     #mavproxy.interact()
     print("Closing SITL")
-    mavproxy.close(force=True)
+    mavproxy.sendcontrol('c')
+    #mavproxy.close(force=True)
     
     oldName = "/home/dello/EFLS/build/results/temp"
     newName = "/home/dello/EFLS/build/results/Test" + str(loop) 
