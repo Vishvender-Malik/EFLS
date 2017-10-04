@@ -44,7 +44,7 @@ void FileWriter::write(const char* input){
 
 string FileWriter::cwd(const char* input) {
     stringstream message;
-    message << "/home/dello/EFLS/build/results/temp/" << input;
+    message << "/home/dello/EFLS/build/results/" << input;
     string messageStr = message.str();
     return messageStr;
 }

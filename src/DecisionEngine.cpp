@@ -45,7 +45,7 @@ void DecisionEngine::run() {
                     std::cout << "DecisionEngine: Last search for a safe landing site" << std::endl;
                     level = 3;
                     try {
-                        FileWriter::write("\nLast Search");
+                        FileWriter::write("\nLast_Search");
                         process(origin, level);
                         foundSite = true;
                     } catch (NoSite& e) {
@@ -59,7 +59,7 @@ void DecisionEngine::run() {
                     std::cout << "DecisionEngine: Second last search for a safe landing site" << std::endl;
                     level = 3;
                     try {
-                        FileWriter::write("\nSecond Last Search");
+                        FileWriter::write("\nSecond_Last_Search");
                         process(origin, level);
                         foundSite = true;
                     } catch (NoSite& e) {
@@ -71,7 +71,7 @@ void DecisionEngine::run() {
                 //Large search area --> finds a landing site a far distance away
                 else if (estimator.sufficentRange(param.largeSearch_minRange) && level == 11) {
                     try {
-                        FileWriter::write("\nLarge Area Search");
+                        FileWriter::write("\nLarge_Area_Search");
                         std::cout << "DecisionEngine: Landing location search from far zoom level" << std::endl;
 
                         Parameters paramTemp = param;
@@ -95,7 +95,7 @@ void DecisionEngine::run() {
                         variablePath << "/home/dello/EFLS/build/results/temp/test" << counter << "/";
                         FileWriter::setCwdVariable(variablePath.str().c_str());
 
-                        FileWriter::write("\nSpecific Search");
+                        FileWriter::write("\nSpecific_Search");
                         process(locSite, level);
                         foundSite = true;
                     } catch (NoSite& e) {
@@ -107,7 +107,7 @@ void DecisionEngine::run() {
                 else {
                     // Search at the origin for a landing site
                     try {
-                        FileWriter::write("\nOrigin Search");
+                        FileWriter::write("\nOrigin_Search");
                         std::cout << "DecisionEngine: Landing site search started, around the aircraft" << std::endl;
                         process(origin, level);
                         foundSite = true;
@@ -127,7 +127,7 @@ void DecisionEngine::run() {
                                 FileWriter::setCwdVariable(variablePath.str().c_str());
 
                                 try {
-                                    FileWriter::write("\nRandom Search");
+                                    FileWriter::write("\nRandom_Search");
                                     maxDistance = param.randomLoc_maxDistance;
                                     if (estimator.estimateRange() < param.randomLoc_maxDistance) {
                                         maxDistance = estimator.estimateRange();
