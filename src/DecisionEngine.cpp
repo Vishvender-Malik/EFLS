@@ -109,6 +109,12 @@ void DecisionEngine::run() {
                     try {
                         FileWriter::write("\nOrigin_Search");
                         std::cout << "DecisionEngine: Landing site search started, around the aircraft" << std::endl;
+
+                        counter++;
+                        std::stringstream variablePath;
+                        variablePath << "/home/dello/EFLS/build/results/temp/test" << counter << "/";
+                        FileWriter::setCwdVariable(variablePath.str().c_str());
+
                         process(origin, level);
                         foundSite = true;
                     } catch (NoSite& e) {
@@ -257,6 +263,7 @@ void DecisionEngine::process(Location origin, int level) {
     cv::multiply(rawCalImage, cv::Scalar::all(1), rawCalFaded, 0.5);
     rawCalImage.copyTo(rawCalFaded, selection.getScan().data);
     cv::imwrite(FileWriter::cwdVariable("landingSiteDisplayed.bmp"),rawCalFaded);
+    cv::imwrite("/home/dello/EFLS/build/results/temp/landingSiteDisplayed.bmp",rawCalFaded);
 
     // Print waypoints
     std::cout << "DecisionEngine: Displaying waypoints to safe landing site" << std::endl;
