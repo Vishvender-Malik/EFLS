@@ -35,8 +35,8 @@ def wait_time(mav, simtime):
         if t2 - t1 > simtime:
             break
 
-for loop in range(0,20):
-    cmd = 'sim_vehicle.py -S 5 -L Test' + str(loop) +' --map --aircraft test -v ArduPlane'
+for loop in range(0,40+1):
+    cmd = 'sim_vehicle.py -S 5 -L Test' + str(loop) +' --aircraft test -v ArduPlane'
     
     mavproxy = pexpect.spawn(cmd, logfile=sys.stdout, timeout=600)
     mavproxy.expect("online")
@@ -45,7 +45,7 @@ for loop in range(0,20):
     
     print("SITL_SCRIPT: Staring SITL")
     
-    mavproxy.send('module load map\n')
+    #mavproxy.send('module load map\n')
     mavproxy.expect("EKF2 IMU1 Origin set to GPS")
     mavproxy.expect("EKF2 IMU0 is using GPS")
     mavproxy.send('wp load defaultWaypoints\n')
@@ -62,14 +62,18 @@ for loop in range(0,20):
     mavproxy.send('arm throttle\n')
     mavproxy.expect("ARMED")
     wait_time(mav, 20)
-    efls = pexpect.spawn("python EFLS_start.py", timeout=600)
     
-    mavproxy.expect("Auto disarmed")
+    print("SITL SCRIPT: Started EFLS")
+    name = "python EFLS_start.py TEST" + str(loop)
+    efls = pexpect.spawn(name, timeout=600)
+    print("SITL SCRIPT: Finished EFLS")
+    
+    mavproxy.expect(["Auto disarmed", "no link"])
     #mavproxy.send('module unload map\n')
-    wait_time(mav, 10)
+    #wait_time(mav, 10)
     #mavproxy.logfile = None
     #mavproxy.interact()
-    print("Closing SITL")
+    print("SITL SCRIPT: Closing SITL")
     mavproxy.sendcontrol('c')
     #mavproxy.close(force=True)
     
