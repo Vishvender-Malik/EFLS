@@ -18,7 +18,7 @@ bool Estimator::sufficentThrust() {
 }
 
 bool Estimator::sufficentRange(double rangeReq) {
-    return true;
+    return (rangeReq < estimateRange());
 }
 
 void Estimator::update(Aircraft aircraft, Parameters param) {
@@ -27,7 +27,9 @@ void Estimator::update(Aircraft aircraft, Parameters param) {
 }
 
 double Estimator::estimateRange() {
-    //ToDo Estimate range equation
+    if (!sufficentThrust()) {
+    	return aircraft.getAltitude() * param.glide_slope;
+    }
     return 100000;
 }
 
