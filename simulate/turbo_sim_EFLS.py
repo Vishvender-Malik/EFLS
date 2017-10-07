@@ -8,6 +8,8 @@ print "Turbo sim started"
 
 protocolbuf_out = "/home/dello/EFLS/build/res/protobuf/aircraftLink_medium_aircraft"
 
+os.system("mkdir /home/dello/EFLS/build/results/sites")
+
 # Reads list of locations
 with open('locations.csv', 'rb') as f:
     reader = csv.reader(f)
@@ -46,7 +48,6 @@ for loop in range(0,40+1):
     oldName = "/home/dello/EFLS/build/results/temp/landingSiteDisplayed.bmp"
     newName = "/home/dello/EFLS/build/results/sites/landingSite" + str(loop) + ".bmp"
     cmdName = "cp " + oldName + " " + newName
-    os.system("mkdir /home/dello/EFLS/build/results/sites")
     os.system(cmdName)
 
     # Move folders to save results
