@@ -41,6 +41,8 @@ public:
 
             //Aircraft parameters
             double glide_slope;  //Meters forward for every meter of altitude lost
+            double estimated_process_time;	//Estimation of amount of time the algorithm takes to run. Used to estimate altitude lost during processing.
+            double glide_safetyFactor;	// Safety factor to be applied to the range estimation.
 
             //Aircraft landing approach parameters
             double landFinalApproachDistance;

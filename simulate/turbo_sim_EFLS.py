@@ -28,10 +28,10 @@ for loop in range(0,40+1):
     aircraft.lon = float(csvList[loop][2])
     aircraft.bearing = 0
     aircraft.speed = 20
-    aircraft.altitude = 100
+    aircraft.altitude = 10000
     aircraft.wind_speed = 10
     aircraft.wind_direction = 45
-    aircraft.motor_current = 0
+    aircraft.motor_current = 10
     aircraft.motor_throttle = 80       
     # Writes aircraft data to Protobuf file
     f = open(protocolbuf_out, "wb")

@@ -10,6 +10,7 @@
 
 #include <Aircraft.h>
 #include <Parameters.h>
+#include <iostream>
 
 class Estimator {
     Aircraft aircraft;

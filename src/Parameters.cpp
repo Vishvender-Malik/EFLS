@@ -21,7 +21,7 @@ Parameters::Parameters() {
         map_sensitivity;  //Sensitivity of scan
 
         //Terrain scan parameters
-        terrain_gradient = 0.1;
+        terrain_gradient = 0.2;
 
         //Generic scan parameters
         resolution.x = 3000;
@@ -35,7 +35,9 @@ Parameters::Parameters() {
         runway_width;    //Length of runway in meters
 
         //Aircraft parameters
-        glide_slope = 10;  //Meters forward for every meter of altitude lost
+        glide_slope = 8;  //Meters forward for every meter of altitude lost
+        estimated_process_time = 60;
+        glide_safetyFactor = 1.1;
 
         //Aircraft landing approach parameters
         landFinalApproachDistance = 300;

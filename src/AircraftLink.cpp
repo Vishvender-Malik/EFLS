@@ -47,6 +47,8 @@ void AircraftLink::send(std::vector<Waypoint> waypoints) {
         way->set_lat(waypoints.at(i).location.lat);
         way->set_lon(waypoints.at(i).location.lon);
         way->set_altitude(waypoints.at(i).altitude);
+        way->set_speed(0.0);
+        way->set_type(1);
     }
 
     //Write to file

@@ -482,6 +482,13 @@ class Waypoint : public ::google::protobuf::Message /* @@protoc_insertion_point(
   double speed() const;
   void set_speed(double value);
 
+  // required int32 type = 5;
+  bool has_type() const;
+  void clear_type();
+  static const int kTypeFieldNumber = 5;
+  ::google::protobuf::int32 type() const;
+  void set_type(::google::protobuf::int32 value);
+
   // @@protoc_insertion_point(class_scope:mav.Waypoint)
  private:
   void set_has_lat();
@@ -492,6 +499,8 @@ class Waypoint : public ::google::protobuf::Message /* @@protoc_insertion_point(
   void clear_has_altitude();
   void set_has_speed();
   void clear_has_speed();
+  void set_has_type();
+  void clear_has_type();
 
   // helper for ByteSizeLong()
   size_t RequiredFieldsByteSizeFallback() const;
@@ -503,6 +512,7 @@ class Waypoint : public ::google::protobuf::Message /* @@protoc_insertion_point(
   double lon_;
   double altitude_;
   double speed_;
+  ::google::protobuf::int32 type_;
   friend struct protobuf_mavProxyLink_2eproto::TableStruct;
 };
 // -------------------------------------------------------------------
@@ -989,6 +999,30 @@ inline void Waypoint::set_speed(double value) {
   set_has_speed();
   speed_ = value;
   // @@protoc_insertion_point(field_set:mav.Waypoint.speed)
+}
+
+// required int32 type = 5;
+inline bool Waypoint::has_type() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void Waypoint::set_has_type() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void Waypoint::clear_has_type() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void Waypoint::clear_type() {
+  type_ = 0;
+  clear_has_type();
+}
+inline ::google::protobuf::int32 Waypoint::type() const {
+  // @@protoc_insertion_point(field_get:mav.Waypoint.type)
+  return type_;
+}
+inline void Waypoint::set_type(::google::protobuf::int32 value) {
+  set_has_type();
+  type_ = value;
+  // @@protoc_insertion_point(field_set:mav.Waypoint.type)
 }
 
 // -------------------------------------------------------------------

@@ -204,10 +204,6 @@ void Selection::setWaypoints(Site site) {
             landArcAccepted = true;
         }
 
-        temp.angle = angle + waypoint.at(i+2).angle;
-        temp.location = Convert::coordinateProjection(waypoint.at(i+2).location, landArcDistance, temp.angle);
-        waypoint.push_back(temp);
-
         // Limits unnecessary waypoints
         if (Convert::haversine(temp.location, planeLocation) < landArcAcceptDistance) {
             landArcAccepted = true;
@@ -215,6 +211,16 @@ void Selection::setWaypoints(Site site) {
         if (Convert::haversine(temp.location, planeLocation) < landArcPartialAcceptDistance && fabs(angle) > landArcPartialAcceptAngle) {
             landArcAccepted = true;
         }
+
+        temp.altitude += 20;
+        if (landArcAccepted && (i-1)>landArcMinWaypoint) {
+        	temp.altitude += 60;
+        }
+        temp.angle = angle + waypoint.at(i+2).angle;
+        temp.location = Convert::coordinateProjection(waypoint.at(i+2).location, landArcDistance, temp.angle);
+        waypoint.push_back(temp);
+
+
     }
 
     temp.angle = scan.aircraft.getBearing();

@@ -105,10 +105,12 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_ATTRIBUTE_SECTION
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Waypoint, lon_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Waypoint, altitude_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Waypoint, speed_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Waypoint, type_),
   0,
   1,
   2,
   3,
+  4,
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AircraftLink, _has_bits_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AircraftLink, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -122,8 +124,8 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_ATTRIBUTE_SECTION
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   { 0, 14, sizeof(Aircraft)},
   { 23, 29, sizeof(Waypoints)},
-  { 30, 39, sizeof(Waypoint)},
-  { 43, 50, sizeof(AircraftLink)},
+  { 30, 40, sizeof(Waypoint)},
+  { 45, 52, sizeof(AircraftLink)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -183,14 +185,14 @@ void AddDescriptorsImpl() {
       "nd_speed\030\006 \002(\001\022\026\n\016wind_direction\030\007 \002(\001\022\025"
       "\n\rmotor_current\030\010 \002(\001\022\026\n\016motor_throttle\030"
       "\t \002(\001\",\n\tWaypoints\022\037\n\010waypoint\030\001 \003(\0132\r.m"
-      "av.Waypoint\"E\n\010Waypoint\022\013\n\003lat\030\001 \002(\001\022\013\n\003"
+      "av.Waypoint\"S\n\010Waypoint\022\013\n\003lat\030\001 \002(\001\022\013\n\003"
       "lon\030\002 \002(\001\022\020\n\010altitude\030\003 \002(\001\022\r\n\005speed\030\004 \002"
-      "(\001\"S\n\014AircraftLink\022 \n\taircrafts\030\001 \003(\0132\r."
-      "mav.Aircraft\022!\n\twaypoints\030\002 \003(\0132\016.mav.Wa"
-      "ypoints"
+      "(\001\022\014\n\004type\030\005 \002(\005\"S\n\014AircraftLink\022 \n\tairc"
+      "rafts\030\001 \003(\0132\r.mav.Aircraft\022!\n\twaypoints\030"
+      "\002 \003(\0132\016.mav.Waypoints"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 407);
+      descriptor, 421);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "mavProxyLink.proto", &protobuf_RegisterTypes);
 }
@@ -1278,6 +1280,7 @@ const int Waypoint::kLatFieldNumber;
 const int Waypoint::kLonFieldNumber;
 const int Waypoint::kAltitudeFieldNumber;
 const int Waypoint::kSpeedFieldNumber;
+const int Waypoint::kTypeFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 Waypoint::Waypoint()
@@ -1295,16 +1298,16 @@ Waypoint::Waypoint(const Waypoint& from)
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::memcpy(&lat_, &from.lat_,
-    static_cast<size_t>(reinterpret_cast<char*>(&speed_) -
-    reinterpret_cast<char*>(&lat_)) + sizeof(speed_));
+    static_cast<size_t>(reinterpret_cast<char*>(&type_) -
+    reinterpret_cast<char*>(&lat_)) + sizeof(type_));
   // @@protoc_insertion_point(copy_constructor:mav.Waypoint)
 }
 
 void Waypoint::SharedCtor() {
   _cached_size_ = 0;
   ::memset(&lat_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&speed_) -
-      reinterpret_cast<char*>(&lat_)) + sizeof(speed_));
+      reinterpret_cast<char*>(&type_) -
+      reinterpret_cast<char*>(&lat_)) + sizeof(type_));
 }
 
 Waypoint::~Waypoint() {
@@ -1345,10 +1348,10 @@ void Waypoint::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 15u) {
+  if (cached_has_bits & 31u) {
     ::memset(&lat_, 0, static_cast<size_t>(
-        reinterpret_cast<char*>(&speed_) -
-        reinterpret_cast<char*>(&lat_)) + sizeof(speed_));
+        reinterpret_cast<char*>(&type_) -
+        reinterpret_cast<char*>(&lat_)) + sizeof(type_));
   }
   _has_bits_.Clear();
   _internal_metadata_.Clear();
@@ -1420,6 +1423,20 @@ bool Waypoint::MergePartialFromCodedStream(
         break;
       }
 
+      // required int32 type = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
+          set_has_type();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &type_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -1467,6 +1484,11 @@ void Waypoint::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteDouble(4, this->speed(), output);
   }
 
+  // required int32 type = 5;
+  if (cached_has_bits & 0x00000010u) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(5, this->type(), output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
@@ -1502,6 +1524,11 @@ void Waypoint::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(4, this->speed(), target);
   }
 
+  // required int32 type = 5;
+  if (cached_has_bits & 0x00000010u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(5, this->type(), target);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target);
@@ -1534,6 +1561,13 @@ size_t Waypoint::RequiredFieldsByteSizeFallback() const {
     total_size += 1 + 8;
   }
 
+  if (has_type()) {
+    // required int32 type = 5;
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->type());
+  }
+
   return total_size;
 }
 size_t Waypoint::ByteSizeLong() const {
@@ -1545,7 +1579,7 @@ size_t Waypoint::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
         _internal_metadata_.unknown_fields());
   }
-  if (((_has_bits_[0] & 0x0000000f) ^ 0x0000000f) == 0) {  // All required fields are present.
+  if (((_has_bits_[0] & 0x0000001f) ^ 0x0000001f) == 0) {  // All required fields are present.
     // required double lat = 1;
     total_size += 1 + 8;
 
@@ -1557,6 +1591,11 @@ size_t Waypoint::ByteSizeLong() const {
 
     // required double speed = 4;
     total_size += 1 + 8;
+
+    // required int32 type = 5;
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->type());
 
   } else {
     total_size += RequiredFieldsByteSizeFallback();
@@ -1591,7 +1630,7 @@ void Waypoint::MergeFrom(const Waypoint& from) {
   (void) cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 15u) {
+  if (cached_has_bits & 31u) {
     if (cached_has_bits & 0x00000001u) {
       lat_ = from.lat_;
     }
@@ -1603,6 +1642,9 @@ void Waypoint::MergeFrom(const Waypoint& from) {
     }
     if (cached_has_bits & 0x00000008u) {
       speed_ = from.speed_;
+    }
+    if (cached_has_bits & 0x00000010u) {
+      type_ = from.type_;
     }
     _has_bits_[0] |= cached_has_bits;
   }
@@ -1623,7 +1665,7 @@ void Waypoint::CopyFrom(const Waypoint& from) {
 }
 
 bool Waypoint::IsInitialized() const {
-  if ((_has_bits_[0] & 0x0000000f) != 0x0000000f) return false;
+  if ((_has_bits_[0] & 0x0000001f) != 0x0000001f) return false;
   return true;
 }
 
@@ -1637,6 +1679,7 @@ void Waypoint::InternalSwap(Waypoint* other) {
   swap(lon_, other->lon_);
   swap(altitude_, other->altitude_);
   swap(speed_, other->speed_);
+  swap(type_, other->type_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
@@ -1744,6 +1787,30 @@ void Waypoint::set_speed(double value) {
   set_has_speed();
   speed_ = value;
   // @@protoc_insertion_point(field_set:mav.Waypoint.speed)
+}
+
+// required int32 type = 5;
+bool Waypoint::has_type() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+void Waypoint::set_has_type() {
+  _has_bits_[0] |= 0x00000010u;
+}
+void Waypoint::clear_has_type() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+void Waypoint::clear_type() {
+  type_ = 0;
+  clear_has_type();
+}
+::google::protobuf::int32 Waypoint::type() const {
+  // @@protoc_insertion_point(field_get:mav.Waypoint.type)
+  return type_;
+}
+void Waypoint::set_type(::google::protobuf::int32 value) {
+  set_has_type();
+  type_ = value;
+  // @@protoc_insertion_point(field_set:mav.Waypoint.type)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
