@@ -243,7 +243,7 @@ void DecisionEngine::process(Location origin, int level) {
     */
 
     Scan terData;
-    if (scan.level > 7) {
+    if (scan.level >= 8) {
         ter.update(scan);
         terData = ter.getScan();
     }

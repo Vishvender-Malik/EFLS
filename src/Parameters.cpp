@@ -63,7 +63,7 @@ Parameters::Parameters() {
         priority_range = 0.0001;   //Converts meters of range into a priority level
 
         // Decision Engine parameters
-        randomLoc_attempts = 5;
+        randomLoc_attempts = 1;
         randomLoc_maxDistance = 10000;
         randomLoc_minDistance = 3000;
         randomLoc_minRange = 5000;
