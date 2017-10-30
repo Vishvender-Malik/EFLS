@@ -24,6 +24,7 @@ Scan Selection::getScan() {
     return scan;
 }
 
+// Fuses the binary arrays together
 void Selection::update(Scan satData, Scan mapData, Scan terData, Scan generic) {
     scan = generic;
     scan.data = (cv::Scalar::all(255)-satData.data);
@@ -266,6 +267,7 @@ cv::Mat Selection::removeMarker(cv::Mat input) {
     return input;
 }
 
+// Site selection process method
 void Selection::process() {
     FileWriter time("selectionProcess");
     std::cout << "Selection: Starting" << std::endl;
