@@ -31,6 +31,7 @@ double Convert::deg2Rad(double angle) {
     return (angle*M_PI)/180;
 }
 
+// Calculates the pixel value for the SRTM file
 int Convert::srtmPixel(double origin, double location) {
     location = abs((location - ((int) origin)) * 60*60);
     int out = round(location/3);
