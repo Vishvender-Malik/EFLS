@@ -3,6 +3,8 @@
  *
  *  Created on: 11Sep.,2017
  *      Author: dello
+ *
+ *  Map builder, is used to work wiht the Libosmiumn custom handler to save the node locations for ease of plotting with the line algorithm
  */
 
 #include <MapBuilder.h>
@@ -17,12 +19,14 @@ void MapBuilder::update(Scan input) {
     clear();
 }
 
+// Add a way to the location vector
 void MapBuilder::addWay(std::vector <Location> location) {
     WayLocation temp;
     temp.wayLocation = location;
     mapLocation.push_back(temp);
 }
 
+// Clear the binary array
 void MapBuilder::clear() {
     MapBuilder::scan.processed = false;
     scan.data = cv::Scalar::all(255);
@@ -33,7 +37,7 @@ Scan MapBuilder::getScan() {
     return scan;
 }
 
-// Bresenham's line algorithm
+// Bresenham's line algorithm to plot the ways
 void MapBuilder::drawLine(float x1, float y1, float x2, float y2){
     bool steep = (fabs(y2 - y1) > fabs(x2 - x1));
     if(steep){
@@ -75,6 +79,7 @@ void MapBuilder::drawLine(float x1, float y1, float x2, float y2){
     }
 }
 
+// Process all of the ways stored in the location vector
 void MapBuilder::process() {
     int preLoc_x, preLoc_y;
     Matrix current, pre;
