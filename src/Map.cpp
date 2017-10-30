@@ -22,6 +22,7 @@ void Map::update(Scan scan) {
     process();
 }
 
+// Processes the requested search area
 void Map::process() {
     std::cout << "Map: Started" << std::endl;
 
