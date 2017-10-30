@@ -3,6 +3,8 @@
  *
  *  Created on: 13Jul.,2017
  *      Author: dello
+ *
+ * Terrain data processing module
  */
 
 #include <Ter.h>
@@ -14,12 +16,14 @@ Ter::Ter() {
         height[i].resize(SRTM_SIZE);
 }
 
+// Supporting method for CURL
 size_t Ter::write_data(void *ptr, size_t size, size_t nmemb, FILE *stream) {
     size_t written;
     written = fwrite(ptr, size, nmemb, stream);
     return written;
 }
 
+// Downloads SRTM data from ArduPilot servers
 void Ter::downloadSRTM(const char* fileName) {
     std::cout << "Terrain: Downloading terrain data" << std::endl;
 
@@ -48,6 +52,7 @@ void Ter::downloadSRTM(const char* fileName) {
     std::cout << system(systemStm.str().c_str());
 }
 
+// Decodes the SRTM data
 void Ter::processSRTM(const char* fileNameDir) {
     std::cout << "Terrain: Reading terrain data" << std::endl;
 
@@ -68,6 +73,7 @@ void Ter::processSRTM(const char* fileNameDir) {
     }
 }
 
+// Calculates the magnitude of the gradient and determines if it is suitable
 void Ter::processGradient() {
     std::cout << "Terrain: Processing the terrain gradient" << std::endl;
 
@@ -121,6 +127,7 @@ void Ter::processGradient() {
     }
 }
 
+// Processes the terrain data
 void Ter::process() {
     std::cout << "Terrain: Started" << std::endl;
 
