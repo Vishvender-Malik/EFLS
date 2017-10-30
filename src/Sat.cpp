@@ -3,6 +3,8 @@
  *
  *  Created on: 13Jul.,2017
  *      Author: dello
+ *
+ * Satellite image processing module
  */
 
 #include <Sat.h>
@@ -22,6 +24,7 @@ void Sat::update(Scan scan) {
     process();
 }
 
+// Saves the generated results
 void Sat::save() {
     cv::Mat src, dst;
     src = rawImage;
@@ -31,6 +34,7 @@ void Sat::save() {
     cv::imwrite("result.bmp", dst);
 }
 
+// Canny edges detection method
 // Note:: Black pixel is edges and white pixel is valid area
 cv::Mat Sat::cannyDetection(cv::Mat src) {
     FileWriter time("canny");
@@ -49,6 +53,7 @@ cv::Mat Sat::cannyDetection(cv::Mat src) {
     return edges_invert;
 }
 
+// Supporting method for CURL
 size_t Sat::write_data(char *ptr, size_t size, size_t nmemb, void *userdata) {
     std::ostringstream *stream = (std::ostringstream*)userdata;
     size_t count = size * nmemb;
@@ -56,6 +61,7 @@ size_t Sat::write_data(char *ptr, size_t size, size_t nmemb, void *userdata) {
     return count;
 }
 
+// Download a tile from Google's servers
 cv::Mat Sat::fetchImage(Location originFetch) {
     //Define URL
     std::stringstream urlstm;
@@ -143,6 +149,7 @@ cv::Mat Sat::getImage() {
     return images;
 }
 
+// Processing method for the satellite image
 void Sat::process() {
     FileWriter time("processSatellite");
     std::cout << "Sat: Started" << std::endl;
