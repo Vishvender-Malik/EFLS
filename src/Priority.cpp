@@ -1,6 +1,6 @@
 /*
  * Priority.cpp
- *
+ * NOT USED CURRENTLY - FUTURE EXPANSION
  *  Created on: 12Jul.,2017
  *      Author: dello
  */
