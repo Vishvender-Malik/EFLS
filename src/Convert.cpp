@@ -63,6 +63,7 @@ double Convert::pixelPerMeter(int zoom, double lat) {
     return pixelPerMeter;
 }
 
+// Calculates bearing from 2 coordinate points
 double Convert::coordinate2Bearing(Location location1, Location location2) {
     location1 = deg2Rad(location1);
     location2 = deg2Rad(location2);
@@ -130,6 +131,7 @@ Location Convert::matrix2Coordinate(Location origin, Matrix location, double pix
     return coordinateProjection(origin, distance, bearing);
 }
 
+// Calculates cartesian location from coordinates
 Matrix Convert::coordinate2Matrix(Location origin, Location location, Matrix dimension, double pixelPerMeter) {
     Matrix output;
     Location difference;     // Lat/Lon difference from origin to the boarder
@@ -146,6 +148,7 @@ Matrix Convert::coordinate2Matrix(Location origin, Location location, Matrix dim
     return output;
 }
 
+// Custom line expansion method for binary MAT
 cv::Mat Convert::lineExpansion(cv::Mat input) {
     FileWriter time("lineExpansion");
     cv::Mat edges;
