@@ -10,6 +10,7 @@
 Estimator::Estimator() {
 }
 
+// Checks for an engine failure
 bool Estimator::sufficentThrust() {
 	return false; // To trick the sim, DO NOT USE!!! ToDo remove this
     if (aircraft.getMotorThrottle() > param.getThrottle_threshold() && aircraft.getMotorCurrent() < param.getCurrent_min()) {
@@ -18,15 +19,18 @@ bool Estimator::sufficentThrust() {
     return true;
 }
 
+// Checks if the requested range is possible to reach
 bool Estimator::sufficentRange(double rangeReq) {
     return (rangeReq < estimateRange());
 }
 
+// Updates internal parameters
 void Estimator::update(Aircraft aircraft, Parameters param) {
     this->aircraft = aircraft;
     this->param = param;
 }
 
+// Calculates the estimated range of the UAV. If no limit then return the maximum range value.
 double Estimator::estimateRange() {
     if (!sufficentThrust()) {
     	std::cout << "Alt: " << aircraft.getAltitude() << std::endl;
