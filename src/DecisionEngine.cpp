@@ -16,7 +16,7 @@ void DecisionEngine::run() {
     while (run_state) {
         updateLite();
         int counter = 0;
-        if (!estimator.sufficentThrust() || true) {
+        if (!estimator.sufficentThrust() || true) {     // Detects emergencies (Overridden for testing)
             std::cout << "DecisionEngine: Emergency Forced Landing is required" << std::endl;
 
             counter++;
@@ -27,7 +27,9 @@ void DecisionEngine::run() {
             Location origin;
             bool foundSite = false;
             level = 11;
-            while (!foundSite) {
+            
+            // Starts loop to find a safe landing site
+            while (!foundSite) {    
                 FileWriter time1("Search");
                 origin = aircraft.getLocation();
                 std::cout << std::endl;
@@ -177,6 +179,7 @@ void DecisionEngine::updateSubroutines() {
     //
 }
 
+// Scans using the large search method
 Location DecisionEngine::processLargeSearch(Scan scan) {
     updateSubroutines();
 
@@ -198,6 +201,7 @@ Location DecisionEngine::processLargeSearch(Scan scan) {
     return selection.getLandingSite().location;
 }
 
+// Scans using the normal search method
 void DecisionEngine::process(Location origin, int level) {
     updateSubroutines();
 
