@@ -13,7 +13,7 @@
 #include "mavProxyLink.pb.h"
 
 Aircraft::Aircraft() {
-    // ToDo Remove defined data, used only for testing purposes
+    // Default data if none is set by UAV. Useful for testing. 
     location.lat = -35.279;
     location.lon = 149.15;
     bearing = 0.0;
@@ -25,6 +25,7 @@ Aircraft::Aircraft() {
     motorThrottle = 0.0;
 }
 
+// Saves the new values
 void Aircraft::refresh(Location location, double bearing,
         double speed, double altitude, double windSpeed,
         double windDirection, double motorCurrent, double motorThrottle) {
